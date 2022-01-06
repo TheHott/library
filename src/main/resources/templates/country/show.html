@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title th:text="${country.getName()}"></title>
+</head>
+<body>
+
+<p th:text="${country.getId()}"/>
+<p th:text="${country.getName()}"/>
+
+<form th:method="DELETE" th:action="@{/api/country/{id}/delete(id=${country.getId()})}">
+	<input type="submit" value="Удалить"/>
+</form>
+
+<a th:href="@{/api/country/{id}/edit(id=${country.getId()})}">Редактировать</a>
+
+<a th:href="@{/api/country/index}">Назад</a>
+
+</body>
+</html>

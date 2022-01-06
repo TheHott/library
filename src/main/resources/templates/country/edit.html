@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Изменить</title>
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/api/country/{id}/update(id=${country.getId()})}" th:object="${country}">
+    <label for="name">Введите имя: </label>
+    <input type="text" th:field="*{name}" id="name" value="${country.getName()}"/>
+    <br/>
+    <input type="submit" value="Обновить"/>
+</form>
+
+<a th:href="@{/api/country/{id}(id=${country.getId()})}" th:text="Отменить">Отменить</a>
+
+</body>
+</html>

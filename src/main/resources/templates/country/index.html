@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Страны</title>
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/api/country/get}" >
+	Введите ID:
+    <input type="text" name="id"/>
+    <input type="submit" value="Открыть"/>
+</form>
+<a th:href="@{/api/country/create}" th:text="Создать">country</a>
+<br/>
+<br/>
+<table border=1>
+	<tr th:each="country : ${countries}">
+		<td><p th:text="${country.getId()}"/></td>
+		<td><a th:href="@{/api/country/{id}(id=${country.getId()})}"
+    			th:text="${country.getName()}"></a></td>
+	</tr>
+</table>
+
+</body>
+</html>
