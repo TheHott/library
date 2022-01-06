@@ -24,7 +24,13 @@
 
 <table>
 	<tr>
-		<td th:each="page : ${pages}"><a th:href="@{/api/country/index/?page={page}(page=${page})}" th:text="${page}"></a></td>	
+		<td th:each="page : ${pages}">
+		<th:block th:if="${page} != ${currentPage}">
+			<a th:href="@{/api/country/index/?page={page}(page=${page})}" th:text="${page}"></a>
+		</th:block>
+		<th:block th:if="${page} == ${currentPage}">
+			<p th:href="@{/api/country/index/?page={page}(page=${page})}" th:text="${page}"/>
+		</th:block></td>	
 	</tr>
 
 </table>
