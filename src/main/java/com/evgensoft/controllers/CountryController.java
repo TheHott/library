@@ -31,6 +31,7 @@ public class CountryController {
 	
 	private final float PAGE_SIZE = 10;
 	
+	/* Старая версия index, где нет пагинации */
 //	@GetMapping("/index")
 //	public String index(Model model) {
 //		model.addAttribute("countries", countryService.getAll());
@@ -39,11 +40,17 @@ public class CountryController {
 	
 	@GetMapping(value = "/index")
 	public String findPaginated(Model model, @RequestParam(name = "page", defaultValue = "1") int page) {
-		System.out.println("page = " + page);
-		Page<Country> resultPage = countryService.getByPage(PageRequest.of(page-1, (int) PAGE_SIZE));
 		int maxPages = (int) Math.ceil(countryService.getCount()/PAGE_SIZE);
 		int pages[] = new int[maxPages];
 		
+		if(page > maxPages) // если введена страница больше возможной
+			page = maxPages;
+		else if(page < 1) // если введена страница меньше минимальной
+			page = 1;
+		
+		Page<Country> resultPage = countryService.getByPage(PageRequest.of(page-1, (int) PAGE_SIZE));
+		
+		// создает массив страниц от первой до maxPages
 		for(int i=0; i<maxPages; i++)
 			pages[i] = i+1;
 			
@@ -71,8 +78,10 @@ public class CountryController {
 	}
 	
 	@GetMapping("/{id}")
-	public String show(@PathVariable("id") Long id, Model model) {
+	public String show(@PathVariable("id") Long id, Model model, 
+			@RequestParam(name = "fromPage", required = false, defaultValue="1") int fromPage) {
 		model.addAttribute("country", countryService.readById(id));
+		model.addAttribute("fromPage", fromPage);
 		return "country/show";
 	}
 	

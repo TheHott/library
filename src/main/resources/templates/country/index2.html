@@ -17,7 +17,7 @@
 <table border=1>
 	<tr th:each="country : ${resultPage}">
 		<td><p th:text="${country.getId()}"/></td>
-		<td><a th:href="@{/api/country/{id}(id=${country.getId()})}"
+		<td><a th:href="@{/api/country/{id}?fromPage={page}(id=${country.getId()}, page=${currentPage})}"
     			th:text="${country.getName()}"></a></td>
 	</tr>
 </table>
