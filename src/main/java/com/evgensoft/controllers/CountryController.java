@@ -1,16 +1,12 @@
 package com.evgensoft.controllers;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-// import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -85,16 +81,8 @@ public class CountryController {
 		return "country/show";
 	}
 	
-//	@PostMapping("/get")
-//	public String showById(@ModelAttribute("search") String id) {
-//		System.out.println(id);
-//
-//		return "redirect:/api/country/{id}";
-//	}
 	@PostMapping("/get")
 	public String showById(@RequestParam Long id) {
-		System.out.println("id = " + id);
-		
 		return "redirect:/api/country/" + id;
 	}
 	
