@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title th:text="${author.getFullName()}"></title>
+</head>
+<body>
+
+<p th:text="${author.getId()}"/>
+<p th:text="${author.getFullName()}"/>
+<a th:href="@{/api/country/{id}(id=${author.getBirthCountry().getId()})}" th:text="${author.getBirthCountry().getName()}">Ссылка на страну</a>
+<p th:text="${author.getBirthday()}"/>
+<p th:text="${author.getDeathDate()}"/>
+
+<form th:method="DELETE" th:action="@{/api/author/{id}/delete(id=${author.getId()})}">
+	<input type="submit" value="Удалить"/>
+</form>
+
+<a th:href="@{/api/author/{id}/edit(id=${author.getId()})}">Редактировать</a>
+
+<a th:href="@{/api/author/index?page={from}(from=${fromPage})}">Вернуться к списку</a>
+<input type="button" value="Назад" onclick="history.back()">
+
+</body>
+</html>

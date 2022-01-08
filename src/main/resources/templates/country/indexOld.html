@@ -15,24 +15,11 @@
 <br/>
 <br/>
 <table border=1>
-	<tr th:each="country : ${resultPage}">
+	<tr th:each="country : ${countries}">
 		<td><p th:text="${country.getId()}"/></td>
-		<td><a th:href="@{/api/country/{id}?fromPage={page}(id=${country.getId()}, page=${currentPage})}"
+		<td><a th:href="@{/api/country/{id}(id=${country.getId()})}"
     			th:text="${country.getName()}"></a></td>
 	</tr>
-</table>
-
-<table>
-	<tr>
-		<td th:each="page : ${pages}">
-		<th:block th:if="${page} != ${currentPage}">
-			<a th:href="@{/api/country/index/?page={page}(page=${page})}" th:text="${page}"></a>
-		</th:block>
-		<th:block th:if="${page} == ${currentPage}">
-			<p th:href="@{/api/country/index/?page={page}(page=${page})}" th:text="${page}"/>
-		</th:block></td>	
-	</tr>
-
 </table>
 
 </body>

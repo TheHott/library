@@ -1,12 +1,12 @@
 package com.evgensoft.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.evgensoft.dto.requests.CountryRequestDTO;
-import com.evgensoft.dto.responses.CountryResponseDTO;
 import com.evgensoft.entities.Country;
 
 public interface CountryService {
@@ -17,4 +17,5 @@ public interface CountryService {
 	List<Country> getAll();
 	Page<Country> getByPage(Pageable pageable);
 	Long getCount();
+	public Country getByName(String name);
 }

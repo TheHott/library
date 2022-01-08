@@ -13,31 +13,26 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.evgensoft.dto.requests.CountryRequestDTO;
+import com.evgensoft.dto.requests.AuthorRequestDTO;
+import com.evgensoft.entities.Author;
 import com.evgensoft.entities.Country;
+import com.evgensoft.services.AuthorService;
 import com.evgensoft.services.CountryService;
 
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @Controller
-@RequestMapping(value = "api/country")
-public class CountryController {
-	
+@RequestMapping("/api/author")
+public class AuthorController {
 	private final CountryService countryService;
+	private final AuthorService authorService;
 	
 	private final float PAGE_SIZE = 10;
 	
-	/* Старая версия index, где нет пагинации */
-//	@GetMapping("/index")
-//	public String index(Model model) {
-//		model.addAttribute("countries", countryService.getAll());
-//		return "country/index";
-//	}
-	
-	@GetMapping(value = "/index")
+	@GetMapping("/index")
 	public String indexPaginated(Model model, @RequestParam(name = "page", defaultValue = "1") int page) {
-		int maxPages = (int) Math.ceil(countryService.getCount()/PAGE_SIZE);
+		int maxPages = (int) Math.ceil(authorService.getCount()/PAGE_SIZE);
 		int pages[] = new int[maxPages];
 		
 		if(page > maxPages) // если введена страница больше возможной
@@ -45,7 +40,7 @@ public class CountryController {
 		else if(page < 1) // если введена страница меньше минимальной
 			page = 1;
 		
-		Page<Country> resultPage = countryService.getByPage(PageRequest.of(page-1, (int) PAGE_SIZE, Sort.by("name").ascending()));
+		Page<Author> resultPage = authorService.getByPage(PageRequest.of(page-1, (int) PAGE_SIZE, Sort.by("fullName").ascending()));
 		
 		// создает массив страниц от первой до maxPages
 		for(int i=0; i<maxPages; i++)
@@ -56,53 +51,64 @@ public class CountryController {
 		model.addAttribute("currentPage", page);
 		model.addAttribute("pages", pages);
 		
-		return "country/index";
+		return "author/index";
 	}
+	
+	@GetMapping("/create")
+	public String createAuthor(@ModelAttribute("author") AuthorRequestDTO authorReq) {
+		return "author/create";
+	}
+	
+	@PostMapping("/new")
+	public String create(@ModelAttribute("author") AuthorRequestDTO authorReq) {
+		Country country = countryService.getByName(authorReq.getBirthCountryName());
+		if(country == null) {
+			// TODO сделать что-нибудь чтоб возвращало текст ошибки
+			return "redirect:/api/author/create";
+		} else
+			authorReq.setBirthCountry(country);
+		authorService.createAuthor(authorReq);
+		
+		return "redirect:/api/author/create";
+	}
+	
 	
 	@GetMapping("/{id}/edit")
 	public String edit(Model model, @PathVariable("id") Long id) {
-		model.addAttribute("country", countryService.readById(id));
-		return "country/edit";
+		model.addAttribute("author", authorService.getAuthorById(id));
+		return "author/edit";
 	}
 	
 	@PostMapping("/{id}/update")
-	public String update(@ModelAttribute("country") Country country, BindingResult bindingResult, @PathVariable("id") Long id) {
-		if(bindingResult.hasErrors())
-			return "api/country/edit";
+	public String update(@ModelAttribute("author") Author author, BindingResult bindingResult, @PathVariable("id") Long id) {
+		Country country = countryService.getByName(author.getBirthCountry().getName());
+		if(country == null || bindingResult.hasErrors()) {
+			// TODO сделать что-нибудь чтоб возвращало текст ошибки
+			return "redirect:/api/author/edit";
+		} else
+			author.setBirthCountry(country);
 		
-		countryService.updateCountry(id, country);
-		return "redirect:/api/country/{id}";
+		authorService.updateAuthor(id, author);
+		return "redirect:/api/author/{id}";
 	}
 	
 	@GetMapping("/{id}")
 	public String show(@PathVariable("id") Long id, Model model, 
 			@RequestParam(name = "fromPage", required = false, defaultValue="1") int fromPage) {
-		model.addAttribute("country", countryService.readById(id));
+		model.addAttribute("author", authorService.getAuthorById(id));
 		model.addAttribute("fromPage", fromPage);
-		return "country/show";
+		return "author/show";
 	}
 	
 	@PostMapping("/get")
 	public String showById(@RequestParam Long id) {
-		return "redirect:/api/country/" + id;
-	}
-	
-	@GetMapping("/create")
-	public String newCountry(@ModelAttribute("country") CountryRequestDTO countryReq) {
-		return "country/create";
-	}
-	
-	@PostMapping("/new")
-	public String create(@ModelAttribute("country") CountryRequestDTO countryReq) {
-		countryService.createCountry(countryReq);
-		return "redirect:/api/country/index";
+		return "redirect:/api/author/" + id;
 	}
 	
 	@PostMapping("/{id}/delete")
 	public String delete(@PathVariable("id") Long id) {
-		countryService.deleteCountry(id);
-		return "redirect:/api/country/index";
+		authorService.deleteAuthor(id);
+		return "redirect:/api/author/index";
 	}
 	
-
 }

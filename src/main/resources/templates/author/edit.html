@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Изменить</title>
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/api/author/{id}/update(id=${author.getId()})}" th:object="${author}">
+    <table>
+		<tr>
+			<td>Введите имя</td>
+			<td><input type="text" th:field="*{fullName}" id="fullName"/></td>
+		</tr>
+		<tr>
+			<td>Введите страну рождения</td>
+			<td><input type="text" th:field="*{birthCountry.name}" id="birthCountryName"/></td>
+		</tr>
+		<tr>
+			<td>Введите дату рождения</td>
+			<td><input type="text" th:field="*{birthday}" id="birthday" placeholder="ДД.ММ.ГГГГ"/></td>
+		</tr>
+		<tr>
+			<td>Введите дату смерти <br/> (если автор жив - оставить пустым)</td>
+			<td><input type="text" th:field="*{deathDate}" id="deathDate" placeholder="ДД.ММ.ГГГГ"/></td>
+		</tr>
+	</table>
+    <input type="submit" value="Обновить"/>
+</form>
+
+<a th:href="@{/api/author/{id}(id=${author.getId()})}" th:text="Отменить">Отменить</a>
+
+</body>
+</html>

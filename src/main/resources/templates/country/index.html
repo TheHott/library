@@ -15,12 +15,34 @@
 <br/>
 <br/>
 <table border=1>
-	<tr th:each="country : ${countries}">
+	<tr>
+		<td>ID</td>
+		<td>Название страны</td>
+	</tr>
+	<tr th:each="country : ${resultPage}">
 		<td><p th:text="${country.getId()}"/></td>
-		<td><a th:href="@{/api/country/{id}(id=${country.getId()})}"
+		<td><a th:href="@{/api/country/{id}?fromPage={page}(id=${country.getId()}, page=${currentPage})}"
     			th:text="${country.getName()}"></a></td>
 	</tr>
 </table>
+
+<table>
+	<tr>
+		<td th:each="page : ${pages}">
+		<th:block th:if="${page} != ${currentPage}">
+			<a th:href="@{/api/country/index?page={page}(page=${page})}" th:text="${page}"></a>
+		</th:block>
+		<th:block th:if="${page} == ${currentPage}">
+			<p th:href="@{/api/country/index?page={page}(page=${page})}" th:text="${page}"/>
+		</th:block></td>	
+	</tr>
+
+</table>
+
+<form th:method="GET" th:action="@{/api/country/index}">
+	<input type="text" name="page"/>
+	<input type="submit" value="Go"/>
+</form>
 
 </body>
 </html>

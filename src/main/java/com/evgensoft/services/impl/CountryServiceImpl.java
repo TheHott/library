@@ -1,14 +1,12 @@
 package com.evgensoft.services.impl;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.evgensoft.dto.requests.CountryRequestDTO;
-import com.evgensoft.dto.responses.CountryResponseDTO;
 import com.evgensoft.entities.Country;
 import com.evgensoft.exceptions.NotFoundException;
 import com.evgensoft.repositories.CountryRepository;
@@ -56,5 +54,15 @@ public class CountryServiceImpl implements CountryService {
 	public Page<Country> getByPage(Pageable pageable) {
 		return countryRepo.findAll(pageable);
 	}
-
+	
+	@Override
+	public Country getByName(String name) {
+		try {
+			Country country = countryRepo.findByName(name);
+			return country;
+		} catch (NotFoundException nfe) {
+			throw new NotFoundException(String.format("Страна с именем %d не найдена", name));
+		}
+			
+	}
 }
