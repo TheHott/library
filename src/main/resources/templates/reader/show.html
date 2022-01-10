@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title th:text="${reader.getFullName()}"></title>
+</head>
+<body>
+
+<p th:text="${reader.getId()}"/>
+<p th:text="${reader.getFullName()}"/>
+<p th:text="${reader.getDebt()}"/>
+
+<form th:method="DELETE" th:action="@{/api/reader/{id}/delete(id=${reader.getId()})}">
+	<input type="submit" value="Удалить"/>
+</form>
+
+<a th:href="@{/api/reader/{id}/edit(id=${reader.getId()})}">Редактировать</a>
+
+<a th:href="@{/api/reader/index?page={from}(from=${fromPage})}">Список стран</a>
+<input type="button" value="Назад" onclick="history.back()">
+
+</body>
+</html>

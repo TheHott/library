@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Читатели</title>
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/api/reader/get}" >
+	Введите ID:
+    <input type="text" name="id"/>
+    <input type="submit" value="Открыть"/>
+</form>
+<a th:href="@{/api/reader/create}" th:text="Создать">reader</a>
+<br/>
+<br/>
+<table border=1>
+	<tr>
+		<td>ID</td>
+		<td>ФИО читателя</td>
+	</tr>
+	<tr th:each="reader : ${resultPage}">
+		<td><p th:text="${reader.getId()}"/></td>
+		<td><a th:href="@{/api/reader/{id}?fromPage={page}(id=${reader.getId()}, page=${currentPage})}"
+    			th:text="${reader.getFullName()}"></a></td>
+	</tr>
+</table>
+
+<table>
+	<tr>
+		<td th:each="page : ${pages}">
+		<th:block th:if="${page} != ${currentPage}">
+			<a th:href="@{/api/reader/index?page={page}(page=${page})}" th:text="${page}"></a>
+		</th:block>
+		<th:block th:if="${page} == ${currentPage}">
+			<p th:href="@{/api/reader/index?page={page}(page=${page})}" th:text="${page}"/>
+		</th:block></td>	
+	</tr>
+
+</table>
+
+<form th:method="GET" th:action="@{/api/reader/index}">
+	<input type="text" name="page"/>
+	<input type="submit" value="Go"/>
+</form>
+
+</body>
+</html>

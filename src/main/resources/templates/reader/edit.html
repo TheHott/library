@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Изменить</title>
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/api/reader/{id}/update(id=${reader.getId()})}" th:object="${reader}">
+    <label for="name">Введите имя: </label>
+    <input type="text" th:field="*{fullName}" id="fullName" value="${reader.getFullName()}"/>
+    <label for="name">Введите задолженность: </label>
+    <input type="text" th:field="*{debt}" id="debt" value="${reader.getDebt()}"/>
+    <br/>
+    <input type="submit" value="Обновить"/>
+</form>
+
+<a th:href="@{/api/reader/{id}(id=${reader.getId()})}" th:text="Отменить">Отменить</a>
+
+</body>
+</html>
