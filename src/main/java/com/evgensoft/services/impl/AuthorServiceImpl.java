@@ -56,5 +56,15 @@ public class AuthorServiceImpl implements AuthorService {
 	public Long getCount() {
 		return authorRepo.count();
 	}
+
+	@Override
+	public Author getAuthorByFullName(String name) {
+		try {
+			Author author = authorRepo.findByFullName(name);
+			return author;
+		} catch (NotFoundException nfe) {
+			throw new NotFoundException(String.format("Автора с именем %d не найдена", name));
+		}
+	}
 	
 }

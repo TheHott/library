@@ -16,4 +16,5 @@ public interface AuthorService {
 	List<Author> getAll();
 	Page<Author> getByPage(Pageable pageable);
 	Long getCount();
+	Author getAuthorByFullName(String name);
 }

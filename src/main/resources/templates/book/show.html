@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title th:text="${book.getName()}"></title>
+</head>
+<body>
+
+<p th:text="${book.getId()}"/>
+<p th:text="${book.getName()}"/>
+<a th:href="@{/api/author/{id}(id=${book.getAuthor().getId()})}" th:text="${book.getAuthor().getFullName()}">Ссылка на автора</a>
+<p th:text="${book.getReleaseDate()}"/>
+<p th:text="${book.getInStock}"/>
+
+<form th:method="DELETE" th:action="@{/api/book/{id}/delete(id=${book.getId()})}">
+	<input type="submit" value="Удалить"/>
+</form>
+
+<form th:method="POST" th:action="@{/api/book/{id}/give(id=${book.getId()})}">
+	<input type="submit" value="Дать книгу читателю"/>
+</form>
+
+<form th:method="POST" th:action="@{/api/book/{id}/receive(id=${book.getId()})}">
+	<input type="submit" value="Вернуть книгу в библиотеку"/>
+</form>
+
+<a th:href="@{/api/book/{id}/edit(id=${book.getId()})}">Редактировать</a>
+
+<a th:href="@{/api/book/index?page={from}(from=${fromPage})}">Список книг</a>
+<input type="button" value="Назад" onclick="history.back()">
+
+</body>
+</html>

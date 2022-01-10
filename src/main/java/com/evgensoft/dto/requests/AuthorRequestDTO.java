@@ -14,6 +14,7 @@ public class AuthorRequestDTO {
 	private Country birthCountry;
 	private String birthday;
 	private String deathDate;
+	
 	/* костыль чтобы мог передавать название страны, не делая поиск всех стран перед открытием формы create и не вводя ID
 	 * Может быть всё-таки стоит сначала получать список стран? */
 	private String birthCountryName;
