@@ -1,23 +1,52 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="UTF-8">
 <title th:text="${reader.getFullName()}"></title>
 </head>
 <body>
+	<div sec:authorize="isAuthenticated()">
+		<table id="header">
+			<tr>
+				<td><a href="/">Главная</a></td>
+				<td><a href="/api/author">Авторы</a></td>
+				<td><a href="/api/book">Книги</a></td>
+				<td><b>Читатели</b></td>
+				<td><a href="/api/country">Страны</a></td>
+				<td>Добро пожаловать, <span sec:authentication="name"></span>!
+				</td>
+				<td><a href="/logout">Выйти</a></td>
+			</tr>
+		</table>
+	</div>
+	<div>
+		<table border=1>
+			<tr>
+				<td>ID читателя</td>
+				<td>ФИО читателя</td>
+				<td>Задолженность читателя</td>
+				<td>Взятые читателем книги</td>
+			</tr>
+			<tr>
+				<td><p th:text="${reader.getId()}" /></td>
+				<td><p th:text="${reader.getFullName()}" /></td>
+				<td><p th:text="${reader.getDebt()}" /></td>
+				<td><a
+					th:href="@{/api/reader/{id}/books(id=${reader.getId()})}">Открыть
+						список</a></td>
+			</tr>
+		</table>
 
-<p th:text="${reader.getId()}"/>
-<p th:text="${reader.getFullName()}"/>
-<p th:text="${reader.getDebt()}"/>
+		<form th:method="DELETE"
+			th:action="@{/api/reader/{id}/delete(id=${reader.getId()})}">
+			<input type="submit" value="Удалить" />
+		</form>
 
-<form th:method="DELETE" th:action="@{/api/reader/{id}/delete(id=${reader.getId()})}">
-	<input type="submit" value="Удалить"/>
-</form>
+		<a th:href="@{/api/reader/{id}/edit(id=${reader.getId()})}">Редактировать</a>
 
-<a th:href="@{/api/reader/{id}/edit(id=${reader.getId()})}">Редактировать</a>
-
-<a th:href="@{/api/reader/index?page={from}(from=${fromPage})}">Список стран</a>
-<input type="button" value="Назад" onclick="history.back()">
-
+		<a th:href="@{/api/reader?page={from}(from=${fromPage})}">Список
+			читателей</a> <input type="button" value="Назад" onclick="history.back()">
+	</div>
 </body>
 </html>

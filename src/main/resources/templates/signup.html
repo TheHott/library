@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<meta charset="UTF-8">
+<title>Регистрация</title>
+</head>
+<body>
+	<div>
+		<form th:method="POST" th:object="${userForm}">
+			<table>
+				<tr>
+					<td><input type="text" th:field="*{username}"
+						placeholder="Имя пользователя" autofocus=true id="username"
+						autocomplete=off /></td>
+				</tr>
+				<tr>
+					<td><input type="password" th:field="*{password}"
+						placeholder="Пароль" id="password" autocomplete=off /></td>
+				</tr>
+				<tr>
+					<td><input type="password" th:field="*{passwordConfirm}"
+						placeholder="Повторите пароль" id="passwordConfirm" /></td>
+				</tr>
+				<tr>
+					<td><button type="submit">Зарегистрироваться</button></td>
+				</tr>
+			</table>
+		</form>
+		<p th:text="${passwordError}"></p>
+		<p th:text="${usernameError}"></p>
+		<h4>
+			Уже есть читательский билет? <a href="/login">Авторизоваться</a>
+		</h4>
+		<h4>
+			<a href="/">Главная</a>
+		</h4>
+	</div>
+</body>
+</html>

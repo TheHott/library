@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>Авторы, рожденные в стране</title>
+</head>
+<body>
+	<div sec:authorize="isAuthenticated()">
+		<table id="header">
+			<tr>
+				<td><a href="/">Главная</a></td>
+				<td><a href="/api/author">Авторы</a></td>
+				<td><a href="/api/book">Книги</a></td>
+				<td><a href="/api/reader">Читатели</a></td>
+				<td><b>Страны</b></td>
+				<td>Добро пожаловать, <span sec:authentication="name"></span>!
+				</td>
+				<td><a href="/logout">Выйти</a></td>
+			</tr>
+		</table>
+	</div>
+	<div>
+		<h2>Список авторов, рожденных в стране <b th:text="${country.getName()}"></b></h2>
+		<table border=1>
+			<tr>
+				<td>ID автора</td>
+				<td>ФИО автора</td>
+				<td>Дата рождения</td>
+				<td>Дата смерти</td>
+			</tr>
+			<tr th:each="author : ${resultPage}">
+				<td><p th:text="${author.getId()}" /></td>
+				<td><p th:text="${author.getFullName()}" /></td>
+				<td><p th:text="${author.getBirthday()}" /></td>
+				<td><p th:text="${author.getDeathDate()}" /></td>
+			</tr>
+		</table>
+
+		<table>
+			<tr>
+				<td th:each="page : ${pages}"><th:block
+						th:if="${page} != ${currentPage}">
+						<a
+							th:href="@{/api/reader/{id}/books?page={page}(id=${id}, page=${page})}"
+							th:text="${page}"></a>
+					</th:block> <th:block th:if="${page} == ${currentPage}">
+						<p
+							th:href="@{/api/reader/{id}/books?page={page}(id=${readerId}, page=${page})}"
+							th:text="${page}" />
+					</th:block></td>
+			</tr>
+
+		</table>
+	</div>
+</body>
+</html>

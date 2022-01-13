@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.evgensoft.dto.requests.AuthorRequestDTO;
 import com.evgensoft.entities.Author;
+import com.evgensoft.entities.Book;
 import com.evgensoft.exceptions.NotFoundException;
 import com.evgensoft.repositories.AuthorRepository;
+import com.evgensoft.repositories.BookRepository;
 import com.evgensoft.services.AuthorService;
 
 import lombok.AllArgsConstructor;
@@ -19,7 +21,8 @@ import lombok.AllArgsConstructor;
 public class AuthorServiceImpl implements AuthorService {
 
 	private final AuthorRepository authorRepo;
-	
+	private final BookRepository bookRepo;
+
 	@Override
 	public Long createAuthor(AuthorRequestDTO authorReq) {
 		Author author = AuthorRequestDTO.toEntity(authorReq);
@@ -39,7 +42,8 @@ public class AuthorServiceImpl implements AuthorService {
 
 	@Override
 	public Author getAuthorById(Long id) {
-		return authorRepo.findById(id).orElseThrow(() -> new NotFoundException(String.format("Страна с id=%d не найдена!", id)));
+		return authorRepo.findById(id)
+				.orElseThrow(() -> new NotFoundException(String.format("Страна с id=%d не найдена!", id)));
 	}
 
 	@Override
@@ -66,5 +70,15 @@ public class AuthorServiceImpl implements AuthorService {
 			throw new NotFoundException(String.format("Автора с именем %d не найдена", name));
 		}
 	}
-	
+
+	@Override
+	public Long getBooksCount(Long authorId) {
+		return bookRepo.countByAuthorId(authorId);
+	}
+
+	@Override
+	public Page<Book> getBooksByPage(Long authorId, Pageable pageable) {
+		return bookRepo.findAllByAuthorId(authorId, pageable);
+	}
+
 }

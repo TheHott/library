@@ -1,33 +1,64 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="UTF-8">
 <title th:text="${book.getName()}"></title>
 </head>
 <body>
+	<div sec:authorize="isAuthenticated()">
+		<table id="header">
+			<tr>
+				<td><a href="/">Главная</a></td>
+				<td><a href="/api/author">Авторы</a></td>
+				<td><b>Книги</b></td>
+				<td><a href="/api/reader">Читатели</a></td>
+				<td><a href="/api/country">Страны</a></td>
+				<td>Добро пожаловать, <span sec:authentication="name"></span>!
+				</td>
+				<td><a href="/logout">Выйти</a></td>
+			</tr>
+		</table>
+	</div>
+	<div>
+		<table border=1>
+			<tr>
+				<td>ID книги</td>
+				<td>Название книги</td>
+				<td>ФИО автора книги</td>
+				<td>Дата выхода книги</td>
+				<td>Количество книг в библиотеке</td>
+			</tr>
+			<tr>
+				<td><p th:text="${book.getId()}" /></td>
+				<td><p th:text="${book.getName()}" /></td>
+				<td><a
+					th:href="@{/api/author/{id}(id=${book.getAuthor().getId()})}"
+					th:text="${book.getAuthor().getFullName()}">Ссылка на автора</a></td>
+				<td><p th:text="${book.getReleaseDate()}" /></td>
+				<td><p th:text="${book.getInStock}" /></td>
+			</tr>
+		</table>
 
-<p th:text="${book.getId()}"/>
-<p th:text="${book.getName()}"/>
-<a th:href="@{/api/author/{id}(id=${book.getAuthor().getId()})}" th:text="${book.getAuthor().getFullName()}">Ссылка на автора</a>
-<p th:text="${book.getReleaseDate()}"/>
-<p th:text="${book.getInStock}"/>
+		<form th:method="DELETE"
+			th:action="@{/api/book/{id}/delete(id=${book.getId()})}">
+			<input type="submit" value="Удалить" />
+		</form>
 
-<form th:method="DELETE" th:action="@{/api/book/{id}/delete(id=${book.getId()})}">
-	<input type="submit" value="Удалить"/>
-</form>
+		<form th:method="GET"
+			th:action="@{/api/book/{id}/give(id=${book.getId()})}">
+			<input type="submit" value="Дать книгу читателю" />
+		</form>
 
-<form th:method="POST" th:action="@{/api/book/{id}/give(id=${book.getId()})}">
-	<input type="submit" value="Дать книгу читателю"/>
-</form>
+		<!-- <form th:method="POST"
+			th:action="@{/api/book/{id}/receive(id=${book.getId()})}">
+			<input type="submit" value="Вернуть книгу в библиотеку" />
+		</form> -->
 
-<form th:method="POST" th:action="@{/api/book/{id}/receive(id=${book.getId()})}">
-	<input type="submit" value="Вернуть книгу в библиотеку"/>
-</form>
+		<a th:href="@{/api/book/{id}/edit(id=${book.getId()})}">Редактировать</a>
 
-<a th:href="@{/api/book/{id}/edit(id=${book.getId()})}">Редактировать</a>
-
-<a th:href="@{/api/book/index?page={from}(from=${fromPage})}">Список книг</a>
-<input type="button" value="Назад" onclick="history.back()">
-
+		<a th:href="@{/api/book?page={from}(from=${fromPage})}">Список
+			книг</a> <input type="button" value="Назад" onclick="history.back()">
+	</div>
 </body>
 </html>

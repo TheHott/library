@@ -1,22 +1,50 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="UTF-8">
 <title th:text="${country.getName()}"></title>
 </head>
 <body>
+	<div sec:authorize="isAuthenticated()">
+		<table id="header">
+			<tr>
+				<td><a href="/">Главная</a></td>
+				<td><a href="/api/author">Авторы</a></td>
+				<td><a href="/api/book">Книги</a></td>
+				<td><a href="/api/reader">Читатели</a></td>
+				<td><b>Страны</b></td>
+				<td>Добро пожаловать, <span sec:authentication="name"></span>!
+				</td>
+				<td><a href="/logout">Выйти</a></td>
+			</tr>
+		</table>
+	</div>
+	<div>
+		<table border=1>
+			<tr>
+				<td>ID страны рождения</td>
+				<td>Название страны</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><p th:text="${country.getId()}" /></td>
+				<td><p th:text="${country.getName()}" /></td>
+				<td><a th:href="@{/api/country/{id}/authors(id=${country.getId()})}">Авторы, родившиеся здесь</a></td>
+			</tr>
+		</table>
 
-<p th:text="${country.getId()}"/>
-<p th:text="${country.getName()}"/>
 
-<form th:method="DELETE" th:action="@{/api/country/{id}/delete(id=${country.getId()})}">
-	<input type="submit" value="Удалить"/>
-</form>
 
-<a th:href="@{/api/country/{id}/edit(id=${country.getId()})}">Редактировать</a>
+		<form th:method="DELETE"
+			th:action="@{/api/country/{id}/delete(id=${country.getId()})}">
+			<input type="submit" value="Удалить" />
+		</form>
 
-<a th:href="@{/api/country/index?page={from}(from=${fromPage})}">Список стран</a>
-<input type="button" value="Назад" onclick="history.back()">
+		<a th:href="@{/api/country/{id}/edit(id=${country.getId()})}">Редактировать</a>
 
+		<a th:href="@{/api/country?page={from}(from=${fromPage})}">Список
+			стран</a> <input type="button" value="Назад" onclick="history.back()">
+	</div>
 </body>
 </html>

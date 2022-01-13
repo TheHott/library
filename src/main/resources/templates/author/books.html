@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>Книги, написанные автором</title>
+</head>
+<body>
+	<div sec:authorize="isAuthenticated()">
+		<table id="header">
+			<tr>
+				<td><a href="/">Главная</a></td>
+				<td><b>Авторы</b></td>
+				<td><a href="/api/book">Книги</a></td>
+				<td><a href="/api/reader">Читатели</a></td>
+				<td><a href="/api/country">Страны</a></td>
+				<td>Добро пожаловать, <span sec:authentication="name"></span>!
+				</td>
+				<td><a href="/logout">Выйти</a></td>
+			</tr>
+		</table>
+	</div>
+	<div>
+		<h2>Книги, написанные автором <b th:text="${author.getFullName()}"></b></h2>
+		<table border=1>
+			<tr>
+				<td>ID книги</td>
+				<td>Название книги</td>
+				<td>Дата выхода книги</td>
+				<td>Количество книг в библиотеке</td>
+			</tr>
+			<tr th:each="book : ${resultPage}">
+				<td><p th:text="${book.getId()}" /></td>
+				<td><p th:text="${book.getName()}" /></td>
+				<td><p th:text="${book.getReleaseDate()}" /></td>
+				<td><p th:text="${book.getInStock}" /></td>
+			</tr>
+		</table>
+
+		<table>
+			<tr>
+				<td th:each="page : ${pages}"><th:block
+						th:if="${page} != ${currentPage}">
+						<a
+							th:href="@{/api/reader/{id}/books?page={page}(id=${id}, page=${page})}"
+							th:text="${page}"></a>
+					</th:block> <th:block th:if="${page} == ${currentPage}">
+						<p
+							th:href="@{/api/reader/{id}/books?page={page}(id=${readerId}, page=${page})}"
+							th:text="${page}" />
+					</th:block></td>
+			</tr>
+
+		</table>
+	</div>
+</body>
+</html>

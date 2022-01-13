@@ -1,47 +1,60 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="UTF-8">
 <title>Авторы</title>
 </head>
 <body>
+	<div sec:authorize="isAuthenticated()">
+		<table id="header">
+			<tr>
+				<td><a href="/">Главная</a></td>
+				<td><b>Авторы</b></td>
+				<td><a href="/api/book">Книги</a></td>
+				<td><a href="/api/reader">Читатели</a></td>
+				<td><a href="/api/country">Страны</a></td>
+				<td>Добро пожаловать, <span sec:authentication="name"></span>!
+				</td>
+				<td><a href="/logout">Выйти</a></td>
+			</tr>
+		</table>
+	</div>
+	<div>
+		<form th:method="POST" th:action="@{/api/author/get}">
+			Введите ID: <input type="text" name="id" /> <input type="submit"
+				value="Открыть" />
+		</form>
+		<a th:href="@{/api/author/create}" th:text="Создать">author</a> <br />
+		<br />
+		<table border=1>
+			<tr>
+				<td>ID</td>
+				<td>ФИО автора</td>
+			</tr>
+			<tr th:each="author : ${resultPage}">
+				<td><p th:text="${author.getId()}" /></td>
+				<td><a
+					th:href="@{/api/author/{id}?fromPage={page}(id=${author.getId()}, page=${currentPage})}"
+					th:text="${author.getFullName()}"></a></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td th:each="page : ${pages}"><th:block
+						th:if="${page} != ${currentPage}">
+						<a th:href="@{/api/author?page={page}(page=${page})}"
+							th:text="${page}"></a>
+					</th:block> <th:block th:if="${page} == ${currentPage}">
+						<p th:href="@{/api/author?page={page}(page=${page})}"
+							th:text="${page}" />
+					</th:block></td>
+			</tr>
+		</table>
 
-<form th:method="POST" th:action="@{/api/author/get}" >
-	Введите ID:
-    <input type="text" name="id"/>
-    <input type="submit" value="Открыть"/>
-</form>
-<a th:href="@{/api/author/create}" th:text="Создать">author</a>
-<br/>
-<br/>
-<table border=1>
-	<tr>
-		<td>ID</td>
-		<td>ФИО автора</td>
-	</tr>
-	<tr th:each="author : ${resultPage}">
-		<td><p th:text="${author.getId()}"/></td>
-		<td><a th:href="@{/api/author/{id}?fromPage={page}(id=${author.getId()}, page=${currentPage})}"
-    			th:text="${author.getFullName()}"></a></td>
-	</tr>
-</table>
-
-<table>
-	<tr>
-		<td th:each="page : ${pages}">
-		<th:block th:if="${page} != ${currentPage}">
-			<a th:href="@{/api/author/index?page={page}(page=${page})}" th:text="${page}"></a>
-		</th:block>
-		<th:block th:if="${page} == ${currentPage}">
-			<p th:href="@{/api/author/index?page={page}(page=${page})}" th:text="${page}"/>
-		</th:block></td>	
-	</tr>
-</table>
-
-<form th:method="GET" th:action="@{/api/author/index}">
-	<input type="text" name="page"/>
-	<input type="submit" value="Go"/>
-</form>
-
+		<form th:method="GET" th:action="@{/api/author}">
+			<input type="text" name="page" /> <input type="submit" value="Go" />
+		</form>
+	</div>
 </body>
 </html>

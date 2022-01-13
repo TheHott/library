@@ -1,5 +1,7 @@
 package com.evgensoft.controllers;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.evgensoft.dto.requests.AuthorRequestDTO;
 import com.evgensoft.entities.Author;
+import com.evgensoft.entities.Book;
 import com.evgensoft.entities.Country;
 import com.evgensoft.services.AuthorService;
 import com.evgensoft.services.CountryService;
@@ -27,88 +30,124 @@ import lombok.AllArgsConstructor;
 public class AuthorController {
 	private final CountryService countryService;
 	private final AuthorService authorService;
-	
+
 	private final float PAGE_SIZE = 10;
-	
-	@GetMapping("/index")
+
+	@GetMapping
 	public String indexPaginated(Model model, @RequestParam(name = "page", defaultValue = "1") int page) {
-		int maxPages = (int) Math.ceil(authorService.getCount()/PAGE_SIZE);
+		int maxPages = (int) Math.ceil(authorService.getCount() / PAGE_SIZE);
 		int pages[] = new int[maxPages];
-		
-		if(page > maxPages) // если введена страница больше возможной
+
+		if (maxPages == 0)
+			return "author/emptyIndex";
+
+		if (page > maxPages) // если введена страница больше возможной
 			page = maxPages;
-		else if(page < 1) // если введена страница меньше минимальной
+		else if (page < 1) // если введена страница меньше минимальной
 			page = 1;
-		
-		Page<Author> resultPage = authorService.getByPage(PageRequest.of(page-1, (int) PAGE_SIZE, Sort.by("fullName").ascending()));
-		
+
+		Page<Author> resultPage = authorService
+				.getByPage(PageRequest.of(page - 1, (int) PAGE_SIZE, Sort.by("fullName").ascending()));
+
 		// создает массив страниц от первой до maxPages
-		for(int i=0; i<maxPages; i++)
-			pages[i] = i+1;
-			
-		
+		for (int i = 0; i < maxPages; i++)
+			pages[i] = i + 1;
+
 		model.addAttribute("resultPage", resultPage);
 		model.addAttribute("currentPage", page);
 		model.addAttribute("pages", pages);
-		
+
 		return "author/index";
 	}
-	
+
 	@GetMapping("/create")
-	public String createAuthor(@ModelAttribute("author") AuthorRequestDTO authorReq) {
+	public String createAuthor(Model model, @ModelAttribute("author") AuthorRequestDTO authorReq) {
+		List<Country> countryList = countryService.getAll();
+		model.addAttribute("countryList", countryList);
 		return "author/create";
 	}
-	
+
 	@PostMapping("/new")
 	public String create(@ModelAttribute("author") AuthorRequestDTO authorReq) {
 		Country country = countryService.getByName(authorReq.getBirthCountryName());
-		if(country == null) {
+		if (country == null) {
 			// TODO сделать что-нибудь чтоб возвращало текст ошибки
 			return "redirect:/api/author/create";
 		} else
 			authorReq.setBirthCountry(country);
 		authorService.createAuthor(authorReq);
-		
-		return "redirect:/api/author/create";
+
+		return "redirect:/api/author";
 	}
-	
-	
+
 	@GetMapping("/{id}/edit")
 	public String edit(Model model, @PathVariable("id") Long id) {
+		List<Country> countryList = countryService.getAll();
+		model.addAttribute("countryList", countryList);
 		model.addAttribute("author", authorService.getAuthorById(id));
 		return "author/edit";
 	}
-	
+
 	@PostMapping("/{id}/update")
-	public String update(@ModelAttribute("author") Author author, BindingResult bindingResult, @PathVariable("id") Long id) {
+	public String update(@ModelAttribute("author") Author author, BindingResult bindingResult,
+			@PathVariable("id") Long id) {
 		Country country = countryService.getByName(author.getBirthCountry().getName());
-		if(country == null || bindingResult.hasErrors()) {
+		if (country == null || bindingResult.hasErrors()) {
 			// TODO сделать что-нибудь чтоб возвращало текст ошибки
 			return "redirect:/api/author/edit";
 		} else
 			author.setBirthCountry(country);
-		
+
 		authorService.updateAuthor(id, author);
 		return "redirect:/api/author/{id}";
 	}
-	
+
 	@GetMapping("/{id}")
-	public String show(@PathVariable("id") Long id, Model model, 
-			@RequestParam(name = "fromPage", required = false, defaultValue="1") int fromPage) {
+	public String show(@PathVariable("id") Long id, Model model,
+			@RequestParam(name = "fromPage", required = false, defaultValue = "1") int fromPage) {
 		model.addAttribute("author", authorService.getAuthorById(id));
 		model.addAttribute("fromPage", fromPage);
 		return "author/show";
 	}
-	
+
 	@PostMapping("/get")
 	public String showById(@RequestParam Long id) {
 		return "redirect:/api/author/" + id;
 	}
-	
+
 	@PostMapping("/{id}/delete")
 	public String delete(@PathVariable("id") Long id) {
 		authorService.deleteAuthor(id);
-		return "redirect:/api/author/index";
+		return "redirect:/api/author";
 	}
-	
+
+	@GetMapping("/{id}/books")
+	public String getBooksFromAuthor(@PathVariable("id") Long id, Model model,
+			@RequestParam(name = "page", defaultValue = "1") int page) {
+		int maxPages = (int) Math.ceil(authorService.getBooksCount(id) / PAGE_SIZE);
+		int pages[] = new int[maxPages];
+
+		if (maxPages == 0)
+			return "author/emptyIndex"; // TODO поменять на emptyBooks
+
+		if (page > maxPages)
+			page = maxPages;
+		else if (page < 1)
+			page = 1;
+
+		Page<Book> resultPage = authorService.getBooksByPage(id, PageRequest.of(page - 1, (int) PAGE_SIZE));
+
+		/* TODO вынести этот цикл в отдельную функцию */
+		for (int i = 0; i < maxPages; i++) {
+			pages[i] = i + 1;
+		}
+
+		model.addAttribute("resultPage", resultPage);
+		model.addAttribute("author", authorService.getAuthorById(id));
+		model.addAttribute("currentPage", page);
+		model.addAttribute("pages", pages);
+
+		return "author/books";
+	}
+
 }

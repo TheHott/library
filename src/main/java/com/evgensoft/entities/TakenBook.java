@@ -14,19 +14,19 @@ import lombok.Data;
 
 @Data
 @Entity
-public class TakenBooks {
+public class TakenBook {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@ManyToOne
 	@JoinColumn(nullable = false, name = "book_id")
 	private Book book;
-	
+
 	@ManyToOne
 	@JoinColumn(nullable = false, name = "reader_id")
 	private Reader reader;
-	
+
 	@Column(nullable = false)
 	private LocalDate dateOfTaking;
 }

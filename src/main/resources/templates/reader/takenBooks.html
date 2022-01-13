@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>Книги, взятые читателем</title>
+</head>
+<body>
+	<div sec:authorize="isAuthenticated()">
+		<table id="header">
+			<tr>
+				<td><a href="/">Главная</a></td>
+				<td><a href="/api/author">Авторы</a></td>
+				<td><a href="/api/book">Книги</a></td>
+				<td><b>Читатели</b></td>
+				<td><a href="/api/country">Страны</a></td>
+				<td>Добро пожаловать, <span sec:authentication="name"></span>!
+				</td>
+				<td><a href="/logout">Выйти</a></td>
+			</tr>
+		</table>
+	</div>
+	<div>
+		<h2>Список книг, взятых читателем <b th:text="${reader.getFullName()}"></b></h2>
+		<table border=1>
+			<tr>
+				<td>ID книги</td>
+				<td>Название книги</td>
+				<td>Автор книги</td>
+				<td>Дата взятия</td>
+				<td></td>
+			</tr>
+			<tr th:each="takenBook : ${resultPage}">
+				<td><p th:text="${takenBook.getId()}" /></td>
+				<td><a
+					th:href="@{/api/book/{id}(id=${takenBook.getBook().getId()})}"
+					th:text="${takenBook.getBook().getName()}"></a></td>
+				<td><a
+					th:href="@{/api/author/{id}(id=${takenBook.getBook().getAuthor().getId()})}"
+					th:text="${takenBook.getBook().getAuthor().getFullName()}"></a></td>
+				<td><p th:text="${takenBook.getDateOfTaking()}" /></td>
+				<td><form th:method="POST"
+						th:action="@{/api/book/{bookId}/receive/{takenId}/{readerId}(bookId=${takenBook.getBook().getId()}, 
+						takenId=${takenBook.getId()}, readerId=${takenBook.getReader().getId()})}">
+						<input type="submit" value="Вернуть книгу в библиотеку" />
+					</form></td>
+				<!-- <td><a
+					th:href="@{/api/reader/{id}?fromPage={page}(id=${takenBook.getId()}, page=${currentPage})}"
+					th:text="${takenBook.getFullName()}"></a></td> -->
+			</tr>
+		</table>
+
+		<table>
+			<tr>
+				<td th:each="page : ${pages}"><th:block
+						th:if="${page} != ${currentPage}">
+						<a
+							th:href="@{/api/reader/{id}/books?page={page}(id=${id}, page=${page})}"
+							th:text="${page}"></a>
+					</th:block> <th:block th:if="${page} == ${currentPage}">
+						<p
+							th:href="@{/api/reader/{id}/books?page={page}(id=${readerId}, page=${page})}"
+							th:text="${page}" />
+					</th:block></td>
+			</tr>
+
+		</table>
+	</div>
+</body>
+</html>

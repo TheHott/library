@@ -1,33 +1,54 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="UTF-8">
 <title>Создать автора</title>
 </head>
 <body>
-
-<form th:method="POST" th:action="@{/api/book/new}" th:object="${book}">
-	<table>
-		<tr>
-			<td>Введите название</td>
-			<td><input type="text" th:field="*{name}" id="name"/></td>
-		</tr>
-		<tr>
-			<td>Введите ФИО автора</td>
-			<td><input type="text" th:field="*{authorName}" id="authorName"/></td>
-		</tr>
-		<tr>
-			<td>Дата выпуска книги</td>
-			<td><input type="text" th:field="*{releaseDate}" id="releaseDate" placeholder="ДД.ММ.ГГГГ"/></td>
-		</tr>
-		<tr>
-			<td>Количество на складе</td>
-			<td><input type="text" th:field="*{inStock}" id="inStock"/></td>
-		</tr>
-	</table>
-    <input type="submit" value="Создать"/>
-</form>
-<a th:href="@{/api/book/index}">Назад</a>
-
+	<div sec:authorize="isAuthenticated()">
+		<table id="header">
+			<tr>
+				<td><a href="/">Главная</a></td>
+				<td><a href="/api/author">Авторы</a></td>
+				<td><b>Книги</b></td>
+				<td><a href="/api/reader">Читатели</a></td>
+				<td><a href="/api/country">Страны</a></td>
+				<td>Добро пожаловать, <span sec:authentication="name"></span>!
+				</td>
+				<td><a href="/logout">Выйти</a></td>
+			</tr>
+		</table>
+	</div>
+	<div>
+		<form th:method="POST" th:action="@{/api/book/new}"
+			th:object="${book}">
+			<table>
+				<tr>
+					<td>Введите название</td>
+					<td><input type="text" th:field="*{name}" id="name" /></td>
+				</tr>
+				<tr>
+					<td>Введите ФИО автора</td>
+					<td><input type="text" list="authors" th:field="*{authorName}"
+						autocomplete="off" /> <datalist id="authors">
+							<option th:each="author : ${authorList}"
+								th:value="${author.getFullName()}" th:label="${author.getBirthday()}">
+						</datalist></td>
+				</tr>
+				<tr>
+					<td>Дата выпуска книги</td>
+					<td><input type="text" th:field="*{releaseDate}"
+						id="releaseDate" placeholder="ДД.ММ.ГГГГ" /></td>
+				</tr>
+				<tr>
+					<td>Количество на складе</td>
+					<td><input type="text" th:field="*{inStock}" id="inStock" /></td>
+				</tr>
+			</table>
+			<input type="submit" value="Создать" />
+		</form>
+		<a th:href="@{/api/book}">Назад</a>
+	</div>
 </body>
 </html>

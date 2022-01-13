@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>Дать книгу читателю</title>
+</head>
+<body>
+	<div sec:authorize="isAuthenticated()">
+		<table id="header">
+			<tr>
+				<td><a href="/">Главная</a></td>
+				<td><a href="/api/author">Авторы</a></td>
+				<td><b>Книги</b></td>
+				<td><a href="/api/reader">Читатели</a></td>
+				<td><a href="/api/country">Страны</a></td>
+				<td>Добро пожаловать, <span sec:authentication="name"></span>!
+				</td>
+				<td><a href="/logout">Выйти</a></td>
+			</tr>
+		</table>
+	</div>
+	<div>
+		<form th:method="POST"
+			th:action="@{/api/book/{bookId}/giveTo(bookId=${bookId})}"
+			th:object="${reader}">
+			Введите ID читателя: <input type="text" th:field="*{id}" /> <input
+				type="submit" value="Отдать" />
+		</form>
+		<input type="button" value="Назад" onclick="history.back()">
+	</div>
+</body>
+</html>

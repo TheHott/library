@@ -1,5 +1,6 @@
 package com.evgensoft.services.impl;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -9,9 +10,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.evgensoft.dto.requests.BookRequestDTO;
+import com.evgensoft.dto.requests.ReaderRequestDTO;
 import com.evgensoft.entities.Book;
+import com.evgensoft.entities.TakenBook;
 import com.evgensoft.exceptions.NotFoundException;
 import com.evgensoft.repositories.BookRepository;
+import com.evgensoft.repositories.TakenBookRepository;
 import com.evgensoft.services.BookService;
 
 import lombok.AllArgsConstructor;
@@ -19,8 +23,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 @Service
 public class BookServiceImpl implements BookService {
-	
+
 	private final BookRepository bookRepo;
+	private final TakenBookRepository takenBookRepo;
 
 	@Override
 	public Long createBook(BookRequestDTO bookReq) {
@@ -41,7 +46,8 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public Book getBookById(Long id) {
-		return bookRepo.findById(id).orElseThrow(() -> new NotFoundException(String.format("Книга с id=%d не найдена!", id)));
+		return bookRepo.findById(id)
+				.orElseThrow(() -> new NotFoundException(String.format("Книга с id=%d не найдена!", id)));
 	}
 
 	@Override
@@ -61,24 +67,30 @@ public class BookServiceImpl implements BookService {
 
 	@Transactional
 	@Override
-	public void giveBookToReader(Long id) {
-		Book book = getBookById(id);
-		Integer stock = book.getInStock();
-		if(stock > 0) {
-			bookRepo.setInStock(id, stock - 1);
+	public void giveBookToReader(Long bookId, ReaderRequestDTO readerReq) {
+		Book book = getBookById(bookId);
+		// Reader reader = readerRepo.getById(readerId);
+		TakenBook takenBook = new TakenBook();
+		takenBook.setBook(book);
+		takenBook.setReader(ReaderRequestDTO.toEntity(readerReq));
+		takenBook.setDateOfTaking(LocalDate.now());
+		int stock = book.getInStock();
+
+		if (stock > 0) {
+			bookRepo.setInStock(bookId, stock - 1);
+			takenBookRepo.save(takenBook);
 		} else {
 			// TODO вывести ошибку что на складе нет этой книги
 		}
 	}
-	
+
 	@Transactional
 	@Override
-	public void giveBookToLibrary(Long id) {
-		Book book = getBookById(id);
+	public void giveBookToLibrary(Long bookId, Long takenId) {
+		Book book = getBookById(bookId);
 		Integer stock = book.getInStock();
-		bookRepo.setInStock(id, stock + 1);
+		bookRepo.setInStock(bookId, stock + 1);
+		takenBookRepo.deleteById(takenId);
 	}
-	
-	
 
 }

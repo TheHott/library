@@ -1,19 +1,36 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="UTF-8">
 <title>Изменить</title>
 </head>
 <body>
+	<div sec:authorize="isAuthenticated()">
+		<table id="header">
+			<tr>
+				<td><a href="/">Главная</a></td>
+				<td><a href="/api/author">Авторы</a></td>
+				<td><a href="/api/book">Книги</a></td>
+				<td><a href="/api/reader">Читатели</a></td>
+				<td><b>Страны</b></td>
+				<td>Добро пожаловать, <span sec:authentication="name"></span>!
+				</td>
+				<td><a href="/logout">Выйти</a></td>
+			</tr>
+		</table>
+	</div>
+	<div>
+		<form th:method="POST"
+			th:action="@{/api/country/{id}/update(id=${country.getId()})}"
+			th:object="${country}">
+			<label for="name">Введите имя: </label> <input type="text"
+				th:field="*{name}" id="name" value="${country.getName()}" /> <br />
+			<input type="submit" value="Обновить" />
+		</form>
 
-<form th:method="POST" th:action="@{/api/country/{id}/update(id=${country.getId()})}" th:object="${country}">
-    <label for="name">Введите имя: </label>
-    <input type="text" th:field="*{name}" id="name" value="${country.getName()}"/>
-    <br/>
-    <input type="submit" value="Обновить"/>
-</form>
-
-<a th:href="@{/api/country/{id}(id=${country.getId()})}" th:text="Отменить">Отменить</a>
-
+		<a th:href="@{/api/country/{id}(id=${country.getId()})}"
+			th:text="Отменить">Отменить</a>
+	</div>
 </body>
 </html>

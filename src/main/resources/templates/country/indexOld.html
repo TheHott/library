@@ -1,26 +1,39 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="UTF-8">
 <title>Страны</title>
 </head>
 <body>
-
-<form th:method="POST" th:action="@{/api/country/get}" >
-	Введите ID:
-    <input type="text" name="id"/>
-    <input type="submit" value="Открыть"/>
-</form>
-<a th:href="@{/api/country/create}" th:text="Создать">country</a>
-<br/>
-<br/>
-<table border=1>
-	<tr th:each="country : ${countries}">
-		<td><p th:text="${country.getId()}"/></td>
-		<td><a th:href="@{/api/country/{id}(id=${country.getId()})}"
-    			th:text="${country.getName()}"></a></td>
-	</tr>
-</table>
-
+	<div sec:authorize="isAuthenticated()">
+		<table id="header">
+			<tr>
+				<td><a href="/">Главная</a></td>
+				<td><a href="/api/author">Авторы</a></td>
+				<td><a href="/api/book">Книги</a></td>
+				<td><a href="/api/reader">Читатели</a></td>
+				<td><b>Страны</b></td>
+				<td>Добро пожаловать, <span sec:authentication="name"></span>!
+				</td>
+				<td><a href="/logout">Выйти</a></td>
+			</tr>
+		</table>
+	</div>
+	<div>
+		<form th:method="POST" th:action="@{/api/country/get}">
+			Введите ID: <input type="text" name="id" /> <input type="submit"
+				value="Открыть" />
+		</form>
+		<a th:href="@{/api/country/create}" th:text="Создать">country</a> <br />
+		<br />
+		<table border=1>
+			<tr th:each="country : ${countries}">
+				<td><p th:text="${country.getId()}" /></td>
+				<td><a th:href="@{/api/country/{id}(id=${country.getId()})}"
+					th:text="${country.getName()}"></a></td>
+			</tr>
+		</table>
+	</div>
 </body>
 </html>

@@ -1,34 +1,62 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="UTF-8">
 <title>Изменить</title>
 </head>
 <body>
+	<div sec:authorize="isAuthenticated()">
+		<table id="header">
+			<tr>
+				<td><a href="/">Главная</a></td>
+				<td><b>Авторы</b></td>
+				<td><a href="/api/book">Книги</a></td>
+				<td><a href="/api/reader">Читатели</a></td>
+				<td><a href="/api/country">Страны</a></td>
+				<td>Добро пожаловать, <span sec:authentication="name"></span>!
+				</td>
+				<td><a href="/logout">Выйти</a></td>
+			</tr>
+		</table>
+	</div>
+	<div>
+		<form th:method="POST"
+			th:action="@{/api/author/{id}/update(id=${author.getId()})}"
+			th:object="${author}">
+			<table>
+				<tr>
+					<td>Введите имя</td>
+					<td><input type="text" th:field="*{fullName}" id="fullName" /></td>
+				</tr>
+				<tr>
+					<td>Выберите страну рождения</td>
+					<td><input type="text" list="countries"
+						th:field="*{birthCountryName}" autocomplete="off" /> <datalist
+							id="countries">
+							<option th:each="country : ${countryList}"
+								th:value="${country.getName()}">
+						</datalist></td>
+				</tr>
+				<tr>
+					<td>Введите дату рождения</td>
+					<td><input type="text" th:field="*{birthday}" id="birthday"
+						placeholder="ДД.ММ.ГГГГ" /></td>
+				</tr>
+				<tr>
+					<td>Введите дату смерти <br /> (если автор жив - оставить
+						пустым)
+					</td>
+					<td><input type="text" th:field="*{deathDate}" id="deathDate"
+						placeholder="ДД.ММ.ГГГГ" /></td>
+				</tr>
+			</table>
+			<input type="submit" value="Обновить" />
+		</form>
+	</div>
 
-<form th:method="POST" th:action="@{/api/author/{id}/update(id=${author.getId()})}" th:object="${author}">
-    <table>
-		<tr>
-			<td>Введите имя</td>
-			<td><input type="text" th:field="*{fullName}" id="fullName"/></td>
-		</tr>
-		<tr>
-			<td>Введите страну рождения</td>
-			<td><input type="text" th:field="*{birthCountry.name}" id="birthCountryName"/></td>
-		</tr>
-		<tr>
-			<td>Введите дату рождения</td>
-			<td><input type="text" th:field="*{birthday}" id="birthday" placeholder="ДД.ММ.ГГГГ"/></td>
-		</tr>
-		<tr>
-			<td>Введите дату смерти <br/> (если автор жив - оставить пустым)</td>
-			<td><input type="text" th:field="*{deathDate}" id="deathDate" placeholder="ДД.ММ.ГГГГ"/></td>
-		</tr>
-	</table>
-    <input type="submit" value="Обновить"/>
-</form>
-
-<a th:href="@{/api/author/{id}(id=${author.getId()})}" th:text="Отменить">Отменить</a>
+	<a th:href="@{/api/author/{id}(id=${author.getId()})}"
+		th:text="Отменить">Отменить</a>
 
 </body>
 </html>

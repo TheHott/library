@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.evgensoft.dto.requests.ReaderRequestDTO;
 import com.evgensoft.entities.Reader;
+import com.evgensoft.entities.TakenBook;
 import com.evgensoft.exceptions.NotFoundException;
 import com.evgensoft.repositories.ReaderRepository;
+import com.evgensoft.repositories.TakenBookRepository;
 import com.evgensoft.services.ReaderService;
 
 import lombok.AllArgsConstructor;
@@ -17,8 +19,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 @Service
 public class ReaderServiceImpl implements ReaderService {
-	
+
 	private final ReaderRepository readerRepo;
+	private final TakenBookRepository takenBookRepo;
 
 	@Override
 	public Long createReader(ReaderRequestDTO readerReq) {
@@ -35,12 +38,14 @@ public class ReaderServiceImpl implements ReaderService {
 
 	@Override
 	public void deleteReader(Long id) {
+		// TODO проверить работает ли
 		readerRepo.deleteById(id);
 	}
 
 	@Override
 	public Reader getReaderById(Long id) {
-		return readerRepo.findById(id).orElseThrow(() -> new NotFoundException(String.format("Читатель с id=%d не найден!", id)));
+		return readerRepo.findById(id)
+				.orElseThrow(() -> new NotFoundException(String.format("Читатель с id=%d не найден!", id)));
 	}
 
 	@Override
@@ -56,6 +61,16 @@ public class ReaderServiceImpl implements ReaderService {
 	@Override
 	public Long getCount() {
 		return readerRepo.count();
+	}
+
+	@Override
+	public Long getTakenBooksCount(Long id) {
+		return takenBookRepo.countByReaderId(id);
+	}
+
+	@Override
+	public Page<TakenBook> getTakenBooksByPage(Long readerId, Pageable pageable) {
+		return takenBookRepo.findAllByReaderId(readerId, pageable);
 	}
 
 }

@@ -1,48 +1,62 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="UTF-8">
 <title>Читатели</title>
 </head>
 <body>
+	<div sec:authorize="isAuthenticated()">
+		<table id="header">
+			<tr>
+				<td><a href="/">Главная</a></td>
+				<td><a href="/api/author">Авторы</a></td>
+				<td><a href="/api/book">Книги</a></td>
+				<td><b>Читатели</b></td>
+				<td><a href="/api/country">Страны</a></td>
+				<td>Добро пожаловать, <span sec:authentication="name"></span>!
+				</td>
+				<td><a href="/logout">Выйти</a></td>
+			</tr>
+		</table>
+	</div>
+	<div>
+		<form th:method="POST" th:action="@{/api/reader/get}">
+			Введите ID: <input type="text" name="id" /> <input type="submit"
+				value="Открыть" />
+		</form>
+		<a th:href="@{/api/reader/create}" th:text="Создать">reader</a> <br />
+		<br />
+		<table border=1>
+			<tr>
+				<td>ID</td>
+				<td>ФИО читателя</td>
+			</tr>
+			<tr th:each="reader : ${resultPage}">
+				<td><p th:text="${reader.getId()}" /></td>
+				<td><a
+					th:href="@{/api/reader/{id}?fromPage={page}(id=${reader.getId()}, page=${currentPage})}"
+					th:text="${reader.getFullName()}"></a></td>
+			</tr>
+		</table>
 
-<form th:method="POST" th:action="@{/api/reader/get}" >
-	Введите ID:
-    <input type="text" name="id"/>
-    <input type="submit" value="Открыть"/>
-</form>
-<a th:href="@{/api/reader/create}" th:text="Создать">reader</a>
-<br/>
-<br/>
-<table border=1>
-	<tr>
-		<td>ID</td>
-		<td>ФИО читателя</td>
-	</tr>
-	<tr th:each="reader : ${resultPage}">
-		<td><p th:text="${reader.getId()}"/></td>
-		<td><a th:href="@{/api/reader/{id}?fromPage={page}(id=${reader.getId()}, page=${currentPage})}"
-    			th:text="${reader.getFullName()}"></a></td>
-	</tr>
-</table>
+		<table>
+			<tr>
+				<td th:each="page : ${pages}"><th:block
+						th:if="${page} != ${currentPage}">
+						<a th:href="@{/api/reader?page={page}(page=${page})}"
+							th:text="${page}"></a>
+					</th:block> <th:block th:if="${page} == ${currentPage}">
+						<p th:href="@{/api/reader?page={page}(page=${page})}"
+							th:text="${page}" />
+					</th:block></td>
+			</tr>
 
-<table>
-	<tr>
-		<td th:each="page : ${pages}">
-		<th:block th:if="${page} != ${currentPage}">
-			<a th:href="@{/api/reader/index?page={page}(page=${page})}" th:text="${page}"></a>
-		</th:block>
-		<th:block th:if="${page} == ${currentPage}">
-			<p th:href="@{/api/reader/index?page={page}(page=${page})}" th:text="${page}"/>
-		</th:block></td>	
-	</tr>
+		</table>
 
-</table>
-
-<form th:method="GET" th:action="@{/api/reader/index}">
-	<input type="text" name="page"/>
-	<input type="submit" value="Go"/>
-</form>
-
+		<form th:method="GET" th:action="@{/api/reader}">
+			<input type="text" name="page" /> <input type="submit" value="Go" />
+		</form>
+	</div>
 </body>
 </html>

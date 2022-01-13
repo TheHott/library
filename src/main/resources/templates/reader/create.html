@@ -1,18 +1,33 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="UTF-8">
 <title>Новая страна</title>
 </head>
 <body>
-
-<form th:method="POST" th:action="@{/api/reader/new}" th:object="${reader}">
-    <label for="name">Введите имя: </label>
-    <input type="text" th:field="*{fullName}" id="fullName"/>
-    <br/>
-    <input type="submit" value="Создать"/>
-</form>
-<a th:href="@{/api/reader/index}">Назад</a>
-
+	<div sec:authorize="isAuthenticated()">
+		<table id="header">
+			<tr>
+				<td><a href="/">Главная</a></td>
+				<td><a href="/api/author">Авторы</a></td>
+				<td><a href="/api/book">Книги</a></td>
+				<td><b>Читатели</b></td>
+				<td><a href="/api/country">Страны</a></td>
+				<td>Добро пожаловать, <span sec:authentication="name"></span>!
+				</td>
+				<td><a href="/logout">Выйти</a></td>
+			</tr>
+		</table>
+	</div>
+	<div>
+		<form th:method="POST" th:action="@{/api/reader/new}"
+			th:object="${reader}">
+			<label for="name">Введите имя: </label> <input type="text"
+				th:field="*{fullName}" id="fullName" /> <br /> <input
+				type="submit" value="Создать" />
+		</form>
+		<a th:href="@{/api/reader}">Назад</a>
+	</div>
 </body>
 </html>
