@@ -32,7 +32,7 @@
 				<tr>
 					<td>Выберите страну рождения</td>
 					<td><input type="text" list="countries"
-						th:field="*{birthCountryName}" autocomplete="off" /> <datalist
+						th:field="*{birthCountry.Name}" autocomplete="off" /> <datalist
 							id="countries">
 							<option th:each="country : ${countryList}"
 								th:value="${country.getName()}">

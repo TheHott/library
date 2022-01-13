@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -148,6 +149,16 @@ public class AuthorController {
 		model.addAttribute("pages", pages);
 
 		return "author/books";
+	}
+
+	@RequestMapping("/search")
+	public String search(Model model, @Param("keyword") String keyword) {
+		List<Author> listAuthors = authorService.listAll(keyword);
+
+		model.addAttribute("resultPage", listAuthors);
+		model.addAttribute("keyword", keyword);
+
+		return "author/index";
 	}
 
 }

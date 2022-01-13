@@ -80,4 +80,12 @@ public class CountryServiceImpl implements CountryService {
 	public Page<Author> getAuthorsByPage(Long countryId, Pageable pageable) {
 		return authorRepo.findAllByBirthCountryId(countryId, pageable);
 	}
+
+	@Override
+	public List<Country> listAll(String keyword) {
+		if (keyword != null) {
+			return countryRepo.search(keyword);
+		}
+		return countryRepo.findAll();
+	}
 }

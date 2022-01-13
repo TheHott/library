@@ -29,4 +29,6 @@ public interface AuthorService {
 	Long getBooksCount(Long authorId);
 
 	Page<Book> getBooksByPage(Long authorId, Pageable pageable);
+
+	List<Author> listAll(String keyword);
 }

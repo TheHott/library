@@ -4,6 +4,11 @@
 <head>
 <meta charset="UTF-8">
 <title>Страны</title>
+<script type="text/javascript">
+	function clearSearch() {
+		window.location = "[[@{/api/country/}]]";
+	}
+</script>
 </head>
 <body>
 	<div sec:authorize="isAuthenticated()">
@@ -20,10 +25,18 @@
 			</tr>
 		</table>
 	</div>
+	<div id="name" th:switch="${keyword}">
+		<h2 th:case=null>Страны - главная страница</h2>
+		<h2 th:case="*">
+			Страны - поиск по запросу "<th:block th:text="${keyword}"/>"
+		</h2>
+	</div>
 	<div>
-		<form th:method="POST" th:action="@{/api/country/get}">
-			Введите ID: <input type="text" name="id" /> <input type="submit"
-				value="Открыть" />
+		<form th:action="@{/api/country/search}">
+			<label for="name">Введите запрос: </label> <input type="text"
+				name="keyword" id="keyword" th:value="${keyword}" required /> <input
+				type="submit" value="Поиск" /> <input type="button"
+				value="Очистить" id="btnClear" onclick="clearSearch()" />
 		</form>
 		<a th:href="@{/api/country/create}" th:text="Создать">country</a> <br />
 		<br />

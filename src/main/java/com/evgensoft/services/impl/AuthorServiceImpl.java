@@ -81,4 +81,12 @@ public class AuthorServiceImpl implements AuthorService {
 		return bookRepo.findAllByAuthorId(authorId, pageable);
 	}
 
+	@Override
+	public List<Author> listAll(String keyword) {
+		if (keyword != null) {
+			return authorRepo.search(keyword);
+		}
+		return authorRepo.findAll();
+	}
+
 }

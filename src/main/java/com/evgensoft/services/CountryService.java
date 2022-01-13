@@ -29,4 +29,6 @@ public interface CountryService {
 	Long getAuthorsCount(Long countryId);
 
 	Page<Author> getAuthorsByPage(Long countryId, Pageable pageable);
+
+	List<Country> listAll(String keyword);
 }
