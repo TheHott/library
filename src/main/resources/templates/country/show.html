@@ -21,6 +21,8 @@
 		</table>
 	</div>
 	<div>
+		<b><a href="/api/country">Список стран</a> -> Страна "<th:block th:text="${country.getName()}"/>"</b>
+		<br/>
 		<table border=1>
 			<tr>
 				<td>ID страны рождения</td>
@@ -35,16 +37,14 @@
 		</table>
 
 
-
-		<form th:method="DELETE"
-			th:action="@{/api/country/{id}/delete(id=${country.getId()})}">
+		<form sec:authorize="hasRole('ROLE_ADMIN')" th:method="POST"
+			th:action="@{/api/country/{id}/delete/confirm(id=${country.getId()})}">
 			<input type="submit" value="Удалить" />
 		</form>
 
-		<a th:href="@{/api/country/{id}/edit(id=${country.getId()})}">Редактировать</a>
+		<a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/api/country/{id}/edit(id=${country.getId()})}">Редактировать</a>
 
-		<a th:href="@{/api/country?page={from}(from=${fromPage})}">Список
-			стран</a> <input type="button" value="Назад" onclick="history.back()">
+		<input type="button" value="Назад" onclick="history.back()">
 	</div>
 </body>
 </html>

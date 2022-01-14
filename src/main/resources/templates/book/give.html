@@ -21,11 +21,17 @@
 		</table>
 	</div>
 	<div>
+		<b><a href="/api/book">Список книг</a> -> <a th:href="@{/api/book/{id}(id = ${book.getId()})}">Книга "<th:block th:text="${book.getName()}"/>"</a> -> Дать книгу</b>
 		<form th:method="POST"
 			th:action="@{/api/book/{bookId}/giveTo(bookId=${bookId})}"
 			th:object="${reader}">
-			Введите ID читателя: <input type="text" th:field="*{id}" /> <input
-				type="submit" value="Отдать" />
+			Введите ID читателя: <input type="text" list="readers"
+				th:field="*{id}" autocomplete="off" />
+			<datalist id="readers">
+				<option th:each="reader : ${readerList}"
+					th:value="${reader.getId()}" th:label="${reader.getFullName()}">
+			</datalist>
+			<input type="submit" value="Отдать" />
 		</form>
 		<input type="button" value="Назад" onclick="history.back()">
 	</div>

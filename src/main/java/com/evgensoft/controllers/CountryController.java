@@ -106,6 +106,13 @@ public class CountryController {
 		return "redirect:/api/country";
 	}
 
+	@PostMapping("/{id}/delete/confirm")
+	public String confirmDelete(Model model, @PathVariable("id") Long id) {
+		model.addAttribute(countryService.readById(id));
+
+		return "country/confirmDelete";
+	}
+
 	@PostMapping("/{id}/delete")
 	public String delete(@PathVariable("id") Long id) {
 		countryService.deleteCountry(id);
@@ -118,8 +125,10 @@ public class CountryController {
 		int maxPages = (int) Math.ceil(countryService.getAuthorsCount(id) / PAGE_SIZE);
 		int pages[] = new int[maxPages];
 
-		if (maxPages == 0)
-			return "reader/emptyIndex"; // TODO поменять на emptyAuthors
+		if (maxPages == 0) {
+			model.addAttribute("country", countryService.readById(id));
+			return "country/emptyAuthors";
+		}
 
 		if (page > maxPages)
 			page = maxPages;

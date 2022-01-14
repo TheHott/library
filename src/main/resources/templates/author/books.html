@@ -21,6 +21,7 @@
 		</table>
 	</div>
 	<div>
+		<b><a href="/api/author">Список авторов</a> -> <a th:href="@{/api/author/{id}(id = ${author.getId()})}">Автор "<th:block th:text="${author.getFullName()}"/>"</a> -> Книги автора "<th:block th:text="${author.getFullName()}"/>"</b>
 		<h2>Книги, написанные автором <b th:text="${author.getFullName()}"></b></h2>
 		<table border=1>
 			<tr>
@@ -31,8 +32,10 @@
 			</tr>
 			<tr th:each="book : ${resultPage}">
 				<td><p th:text="${book.getId()}" /></td>
-				<td><p th:text="${book.getName()}" /></td>
-				<td><p th:text="${book.getReleaseDate()}" /></td>
+				<td><a
+					th:href="@{/api/book/{id}?fromPage={page}(id=${book.getId()}, page=${currentPage})}"
+					th:text="${book.getName()}"></a></td>
+				<td><p th:text="${#temporals.format(book.getReleaseDate(), 'dd MMMM yyyy')}" /></td>
 				<td><p th:text="${book.getInStock}" /></td>
 			</tr>
 		</table>

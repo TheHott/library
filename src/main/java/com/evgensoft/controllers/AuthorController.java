@@ -81,6 +81,13 @@ public class AuthorController {
 		return "redirect:/api/author";
 	}
 
+	@PostMapping("/{id}/delete/confirm")
+	public String confirmDelete(Model model, @PathVariable("id") Long id) {
+		model.addAttribute(authorService.getAuthorById(id));
+
+		return "author/confirmDelete";
+	}
+
 	@GetMapping("/{id}/edit")
 	public String edit(Model model, @PathVariable("id") Long id) {
 		List<Country> countryList = countryService.getAll();
@@ -125,11 +132,14 @@ public class AuthorController {
 	@GetMapping("/{id}/books")
 	public String getBooksFromAuthor(@PathVariable("id") Long id, Model model,
 			@RequestParam(name = "page", defaultValue = "1") int page) {
+		Author author = authorService.getAuthorById(id);
 		int maxPages = (int) Math.ceil(authorService.getBooksCount(id) / PAGE_SIZE);
 		int pages[] = new int[maxPages];
 
-		if (maxPages == 0)
-			return "author/emptyIndex"; // TODO поменять на emptyBooks
+		if (maxPages == 0) {
+			model.addAttribute("author", author);
+			return "author/emptyBooks";
+		}
 
 		if (page > maxPages)
 			page = maxPages;
@@ -144,7 +154,7 @@ public class AuthorController {
 		}
 
 		model.addAttribute("resultPage", resultPage);
-		model.addAttribute("author", authorService.getAuthorById(id));
+		model.addAttribute("author", author);
 		model.addAttribute("currentPage", page);
 		model.addAttribute("pages", pages);
 

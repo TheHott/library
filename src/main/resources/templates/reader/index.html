@@ -6,7 +6,7 @@
 <title>Читатели</title>
 <script type="text/javascript">
 	function clearSearch() {
-		window.location = "[[@{/api/book/}]]";
+		window.location = "[[@{/api/reader/}]]";
 	}
 </script>
 </head>
@@ -29,7 +29,7 @@
 		<div id="name" th:switch="${keyword}">
 			<h2 th:case=null>Читатели - главная страница</h2>
 			<h2 th:case="*">
-				Читатели - поиск по запросу "<th:block th:text="${keyword}" />"
+				Читатели - поиск по запросу "<th:block th:text="${keyword}"/>"
 			</h2>
 		</div>
 		<form th:action="@{/api/reader/search}">

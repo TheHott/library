@@ -28,7 +28,9 @@
 	<div id="name" th:switch="${keyword}">
 		<h2 th:case=null>Страны - главная страница</h2>
 		<h2 th:case="*">
-			Страны - поиск по запросу "<th:block th:text="${keyword}"/>"
+			Страны - поиск по запросу "
+			<th:block th:text="${keyword}" />
+			"
 		</h2>
 	</div>
 	<div>
@@ -44,12 +46,16 @@
 			<tr>
 				<td>ID</td>
 				<td>Название страны</td>
+				<td></td>
 			</tr>
 			<tr th:each="country : ${resultPage}">
 				<td><p th:text="${country.getId()}" /></td>
 				<td><a
 					th:href="@{/api/country/{id}?fromPage={page}(id=${country.getId()}, page=${currentPage})}"
 					th:text="${country.getName()}"></a></td>
+				<td><a
+					th:href="@{/api/country/{id}/authors(id=${country.getId()})}">Авторы,
+						родившиеся здесь</a></td>
 			</tr>
 		</table>
 

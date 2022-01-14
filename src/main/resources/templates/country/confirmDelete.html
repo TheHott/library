@@ -3,7 +3,7 @@
 	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="UTF-8">
-<title>Изменить</title>
+<title th:text="${country.getName()}"></title>
 </head>
 <body>
 	<div sec:authorize="isAuthenticated()">
@@ -24,17 +24,26 @@
 		<b><a href="/api/country">Список стран</a> -> <a
 			th:href="@{/api/country/{id}(id = ${country.getId()})}">Страна "<th:block
 					th:text="${country.getName()}" />"
-		</a> -> Редактировать </b>
-		<form th:method="POST"
-			th:action="@{/api/country/{id}/update(id=${country.getId()})}"
-			th:object="${country}">
-			<label for="name">Введите имя: </label> <input type="text"
-				th:field="*{name}" id="name" value="${country.getName()}" /> <br />
-			<input type="submit" value="Обновить" />
+		</a> -> Удалить</b>
+		<h3>Вы уверены что хотите удалить этого пользователя?</h3>
+
+		<table border=1>
+			<tr>
+				<td>ID страны рождения</td>
+				<td>Название страны</td>
+			</tr>
+			<tr>
+				<td><p th:text="${country.getId()}" /></td>
+				<td><p th:text="${country.getName()}" /></td>
+			</tr>
+		</table>
+
+		<form th:method="DELETE"
+			th:action="@{/api/country/{id}/delete(id=${country.getId()})}">
+			<input type="submit" value="Удалить" />
 		</form>
 
-		<a th:href="@{/api/country/{id}(id=${country.getId()})}"
-			th:text="Отменить">Отменить</a>
+		<input type="button" value="Назад" onclick="history.back()">
 	</div>
 </body>
 </html>

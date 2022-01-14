@@ -21,6 +21,7 @@
 		</table>
 	</div>
 	<div>
+		<b><a href="/api/author">Список авторов</a> -> <a th:href="@{/api/author/{id}(id = ${author.getId()})}">Автор "<th:block th:text="${author.getFullName()}"/>"</a> -> Редактировать</b>
 		<form th:method="POST"
 			th:action="@{/api/author/{id}/update(id=${author.getId()})}"
 			th:object="${author}">
@@ -32,10 +33,9 @@
 				<tr>
 					<td>Выберите страну рождения</td>
 					<td><input type="text" list="countries"
-						th:field="*{birthCountry.Name}" autocomplete="off" /> <datalist
-							id="countries">
-							<option th:each="country : ${countryList}"
-								th:value="${country.getName()}">
+						th:field="*{birthCountry.Name}" autocomplete="off" /> 
+						<datalist id="countries">
+							<option th:each="country : ${countryList}" th:value="${country.getName()}">
 						</datalist></td>
 				</tr>
 				<tr>

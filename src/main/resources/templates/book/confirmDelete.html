@@ -3,7 +3,7 @@
 	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="UTF-8">
-<title th:text="${book.getName()}"></title>
+<title>Удалить <th:block th:text="${book.getName()}">?</title>
 </head>
 <body>
 	<div sec:authorize="isAuthenticated()">
@@ -11,9 +11,9 @@
 			<tr>
 				<td><a href="/">Главная</a></td>
 				<td><a href="/api/author">Авторы</a></td>
-				<td><b>Книги</b></td>
+				<td><a href="/api/book">Книги</a></td>
 				<td><a href="/api/reader">Читатели</a></td>
-				<td><a href="/api/country">Страны</a></td>
+				<td><b>Страны</b></td>
 				<td>Добро пожаловать, <span sec:authentication="name"></span>!
 				</td>
 				<td><a href="/logout">Выйти</a></td>
@@ -21,8 +21,9 @@
 		</table>
 	</div>
 	<div>
-		<b><a href="/api/book">Список книг</a> -> Книга "<th:block th:text="${book.getName()}"/>"</b>
-		<h2>Книга <th:block th:text="${book.getName()}"/>, автор - <th:block th:text="${book.getAuthor().getFullName()}"/></h2>
+		<b><a href="/api/book">Список книг</a> -> <a th:href="@{/api/book/{id}(id = ${book.getId()})}">Книга "<th:block th:text="${book.getName()}"/>"</a> -> Удалить</b>
+		<h3>Вы уверены что хотите удалить эту книгу?</h3>
+
 		<table border=1>
 			<tr>
 				<td>ID книги</td>
@@ -34,25 +35,16 @@
 			<tr>
 				<td><p th:text="${book.getId()}" /></td>
 				<td><p th:text="${book.getName()}" /></td>
-				<td><a
-					th:href="@{/api/author/{id}(id=${book.getAuthor().getId()})}"
-					th:text="${book.getAuthor().getFullName()}">Ссылка на автора</a></td>
-				<td><p th:text="${#temporals.format(book.getReleaseDate(), 'dd MMMM yyyy')}" /></td>
+				<td><p th:text="${book.getAuthor().getFullName()}"/></td>
+				<td><p th:text="${book.getReleaseDate()}" /></td>
 				<td><p th:text="${book.getInStock}" /></td>
 			</tr>
 		</table>
 
-		<form sec:authorize="hasRole('ROLE_ADMIN')" th:method="POST"
-			th:action="@{/api/book/{id}/delete/confirm(id=${book.getId()})}">
+		<form th:method="DELETE"
+			th:action="@{/api/book/{id}/delete(id=${book.getId()})}">
 			<input type="submit" value="Удалить" />
 		</form>
-
-		<form th:method="GET"
-			th:action="@{/api/book/{id}/give(id=${book.getId()})}">
-			<input type="submit" value="Дать книгу читателю" />
-		</form>
-
-		<a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/api/book/{id}/edit(id=${book.getId()})}">Редактировать</a>
 
 		<input type="button" value="Назад" onclick="history.back()">
 	</div>

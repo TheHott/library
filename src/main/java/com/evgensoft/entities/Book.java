@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 
 @Data
@@ -33,6 +35,7 @@ public class Book {
 	private Integer inStock; // сколько таких книг на складе (в библиотеке)
 
 	@Column(nullable = false)
+	@DateTimeFormat(pattern = "dd MMMM yyyy")
 	private LocalDate releaseDate;
 
 	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL)

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>Удалить <th:block th:text="${author.getFullName()}"/>?</title>
+</head>
+<body>
+	<div sec:authorize="isAuthenticated()">
+		<table id="header">
+			<tr>
+				<td><a href="/">Главная</a></td>
+				<td><a href="/api/author">Авторы</a></td>
+				<td><a href="/api/book">Книги</a></td>
+				<td><a href="/api/reader">Читатели</a></td>
+				<td><b>Страны</b></td>
+				<td>Добро пожаловать, <span sec:authentication="name"></span>!
+				</td>
+				<td><a href="/logout">Выйти</a></td>
+			</tr>
+		</table>
+	</div>
+	<div>
+		<b><a href="/api/author">Список авторов</a> -> <a th:href="@{/api/author/{id}(id = ${author.getId()})}">Автор "<th:block th:text="${author.getFullName()}"/>"</a> -> Удалить</b>
+		<h3>Вы уверены что хотите удалить этого автора?</h3>
+
+		<table border=1>
+			<tr>
+				<td>ID автора</td>
+				<td>ФИО автора</td>
+				<td>Страна рождения</td>
+				<td>Дата рождения</td>
+				<td>Дата смерти</td>
+			</tr>
+			<tr>
+				<td><p th:text="${author.getId()}" /></td>
+				<td><p th:text="${author.getFullName()}" /></td>
+				<td><p th:text="${author.getBirthCountry().getName()}" /></td>
+				<td><p th:text="${author.getBirthday()}" /></td>
+				<td><p th:text="${author.getDeathDate()}" /></td>
+			</tr>
+		</table>
+
+		<form th:method="DELETE"
+			th:action="@{/api/author/{id}/delete(id=${author.getId()})}">
+			<input type="submit" value="Удалить" />
+		</form>
+
+		<input type="button" value="Назад" onclick="history.back()">
+	</div>
+</body>
+</html>

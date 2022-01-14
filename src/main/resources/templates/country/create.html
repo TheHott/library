@@ -21,6 +21,7 @@
 		</table>
 	</div>
 	<div>
+		<b><a href="/api/country">Список стран</a> -> Создать</b>
 		<form th:method="POST" th:action="@{/api/country/new}"
 			th:object="${country}">
 			<label for="name">Введите имя: </label> <input type="text"

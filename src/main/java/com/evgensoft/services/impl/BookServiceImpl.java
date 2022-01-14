@@ -10,8 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.evgensoft.dto.requests.BookRequestDTO;
-import com.evgensoft.dto.requests.ReaderRequestDTO;
 import com.evgensoft.entities.Book;
+import com.evgensoft.entities.Reader;
 import com.evgensoft.entities.TakenBook;
 import com.evgensoft.exceptions.NotFoundException;
 import com.evgensoft.repositories.BookRepository;
@@ -67,12 +67,12 @@ public class BookServiceImpl implements BookService {
 
 	@Transactional
 	@Override
-	public void giveBookToReader(Long bookId, ReaderRequestDTO readerReq) {
+	public void giveBookToReader(Long bookId, Reader reader) {
 		Book book = getBookById(bookId);
 		// Reader reader = readerRepo.getById(readerId);
 		TakenBook takenBook = new TakenBook();
 		takenBook.setBook(book);
-		takenBook.setReader(ReaderRequestDTO.toEntity(readerReq));
+		takenBook.setReader(reader);
 		takenBook.setDateOfTaking(LocalDate.now());
 		int stock = book.getInStock();
 

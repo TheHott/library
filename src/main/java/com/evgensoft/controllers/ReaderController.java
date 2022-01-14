@@ -102,14 +102,23 @@ public class ReaderController {
 		return "redirect:/api/reader";
 	}
 
+	@PostMapping("/{id}/delete/confirm")
+	public String confirmDelete(Model model, @PathVariable("id") Long id) {
+		model.addAttribute(readerService.getReaderById(id));
+
+		return "reader/confirmDelete";
+	}
+
 	@GetMapping("/{id}/books")
 	public String showTakenBooks(@PathVariable("id") Long id, Model model,
 			@RequestParam(name = "page", defaultValue = "1") int page) {
 		int maxPages = (int) Math.ceil(readerService.getTakenBooksCount(id) / PAGE_SIZE);
 		int pages[] = new int[maxPages];
 
-		if (maxPages == 0)
+		if (maxPages == 0) {
+			model.addAttribute("reader", readerService.getReaderById(id));
 			return "reader/emptyTakenBooks";
+		}
 
 		if (page > maxPages)
 			page = maxPages;

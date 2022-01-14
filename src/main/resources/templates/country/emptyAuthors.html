@@ -1,35 +1,31 @@
 <!DOCTYPE html>
-<html xmlns:th="https://thymeleaf.org"
+<html xmlns:th="http://thymeleaf.org"
 	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="UTF-8">
-<title>Главная страница</title>
+<title>Книги, взятые читателем</title>
 </head>
 <body>
-	<div sec:authorize="!isAuthenticated()">
-		<h3>Чтобы воспользоваться нашей системой, авторизуйтесь или
-			зарегистрируйтесь!</h3>
-		<h4>
-			<a href="/login">Войти</a>
-		</h4>
-		<h4>
-			<a href="/signup">Зарегистрироваться</a>
-		</h4>
-	</div>
 	<div sec:authorize="isAuthenticated()">
 		<table id="header">
 			<tr>
-				<td><b>Главная</b></td>
+				<td><a href="/">Главная</a></td>
 				<td><a href="/api/author">Авторы</a></td>
 				<td><a href="/api/book">Книги</a></td>
 				<td><a href="/api/reader">Читатели</a></td>
-				<td><a href="/api/country">Страны</a></td>
+				<td><b>Страны</b></td>
 				<td>Добро пожаловать, <span sec:authentication="name"></span>!
 				</td>
 				<td><a href="/logout">Выйти</a></td>
 			</tr>
 		</table>
-		<img src="/images/doge.jpg"/>
+	</div>
+	<div>
+		<b><a href="/api/country">Список стран</a> -> <a
+			th:href="@{/api/country/{id}(id = ${country.getId()})}">Страна "<th:block
+					th:text="${country.getName()}" />"
+		</a> -> Авторы из страны <th:block th:text="${country.getName()}" /></b>
+		<h3>Список пуст!</h3>
 	</div>
 </body>
 </html>

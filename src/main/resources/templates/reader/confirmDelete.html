@@ -3,7 +3,7 @@
 	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="UTF-8">
-<title th:text="${reader.getFullName()}"></title>
+<title>Удалить <th:block th:text="${reader.getFullName()}"/>?</title>
 </head>
 <body>
 	<div sec:authorize="isAuthenticated()">
@@ -12,8 +12,8 @@
 				<td><a href="/">Главная</a></td>
 				<td><a href="/api/author">Авторы</a></td>
 				<td><a href="/api/book">Книги</a></td>
-				<td><b>Читатели</b></td>
-				<td><a href="/api/country">Страны</a></td>
+				<td><a href="/api/reader">Читатели</a></td>
+				<td><b>Страны</b></td>
 				<td>Добро пожаловать, <span sec:authentication="name"></span>!
 				</td>
 				<td><a href="/logout">Выйти</a></td>
@@ -21,32 +21,29 @@
 		</table>
 	</div>
 	<div>
-		<b><a href="/api/reader">Список читателей</a> -> Читатель "<th:block th:text="${reader.getFullName()}"/>"</b>
-		<h2>Читатель <th:block th:text="${reader.getFullName()}"/>, №<th:block th:text="${reader.getId()}"/></h2>
+		<b><a href="/api/reader">Список читателей</a> -> <a
+			th:href="@{/api/reader/{id}(id = ${reader.getId()})}">Читатель "<th:block
+					th:text="${reader.getFullName()}" />"
+		</a> -> Удалить</b>
+		<h3>Вы уверены что хотите удалить этого читателя?</h3>
+
 		<table border=1>
 			<tr>
 				<td>ID читателя</td>
 				<td>ФИО читателя</td>
 				<td>Задолженность читателя</td>
-				<td></td>
 			</tr>
 			<tr>
 				<td><p th:text="${reader.getId()}" /></td>
 				<td><p th:text="${reader.getFullName()}" /></td>
 				<td><p th:text="${reader.getDebt()}" /></td>
-				<td><a
-					th:href="@{/api/reader/{id}/books(id=${reader.getId()})}">Взятые
-						читателем книги</a></td>
 			</tr>
 		</table>
 
-		<form sec:authorize="hasRole('ROLE_ADMIN')" th:method="POST"
-			th:action="@{/api/reader/{id}/delete/confirm(id=${reader.getId()})}">
+		<form th:method="DELETE"
+			th:action="@{/api/reader/{id}/delete(id=${reader.getId()})}">
 			<input type="submit" value="Удалить" />
 		</form>
-
-		<a sec:authorize="hasRole('ROLE_ADMIN')"
-			th:href="@{/api/reader/{id}/edit(id=${reader.getId()})}">Редактировать</a>
 
 		<input type="button" value="Назад" onclick="history.back()">
 	</div>

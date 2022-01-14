@@ -17,11 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.evgensoft.dto.requests.BookRequestDTO;
-import com.evgensoft.dto.requests.ReaderRequestDTO;
 import com.evgensoft.entities.Author;
 import com.evgensoft.entities.Book;
+import com.evgensoft.entities.Reader;
 import com.evgensoft.services.AuthorService;
 import com.evgensoft.services.BookService;
+import com.evgensoft.services.ReaderService;
 
 import lombok.AllArgsConstructor;
 
@@ -31,6 +32,7 @@ import lombok.AllArgsConstructor;
 public class BookController {
 	private final AuthorService authorService;
 	private final BookService bookService;
+	private final ReaderService readerService;
 
 	private final float PAGE_SIZE = 10;
 
@@ -62,14 +64,16 @@ public class BookController {
 	}
 
 	@GetMapping("/{bookId}/give")
-	public String give(@PathVariable("bookId") Long bookId, @ModelAttribute("reader") ReaderRequestDTO readerReq) {
+	public String give(Model model, @PathVariable("bookId") Long bookId, @ModelAttribute("reader") Reader reader) {
+		List<Reader> readerList = readerService.getAll();
+		model.addAttribute("book", bookService.getBookById(bookId));
+		model.addAttribute("readerList", readerList);
 		return "book/give";
 	}
 
 	@PostMapping("/{bookId}/giveTo")
-	public String giveBookToReader(@PathVariable("bookId") Long bookId,
-			@ModelAttribute("reader") ReaderRequestDTO readerReq) {
-		bookService.giveBookToReader(bookId, readerReq);
+	public String giveBookToReader(@PathVariable("bookId") Long bookId, @ModelAttribute("reader") Reader reader) {
+		bookService.giveBookToReader(bookId, reader);
 
 		return "redirect:/api/book/{bookId}";
 	}
@@ -140,6 +144,13 @@ public class BookController {
 	public String delete(@PathVariable("id") Long id) {
 		bookService.deleteBook(id);
 		return "redirect:/api/book";
+	}
+
+	@PostMapping("/{id}/delete/confirm")
+	public String confirmDelete(Model model, @PathVariable("id") Long id) {
+		model.addAttribute(bookService.getBookById(id));
+
+		return "book/confirmDelete";
 	}
 
 	@RequestMapping("/search")

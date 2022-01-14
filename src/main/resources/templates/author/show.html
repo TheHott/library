@@ -21,6 +21,8 @@
 		</table>
 	</div>
 	<div>
+		<b><a href="/api/author">Список авторов</a> -> Автор "<th:block th:text="${author.getFullName()}"/>"</b>
+		<h2>Автор <th:block th:text="${author.getFullName()}"/></h2>
 		<table border=1>
 			<tr>
 				<td>ID автора</td>
@@ -37,20 +39,19 @@
 					th:href="@{/api/country/{id}(id=${author.getBirthCountry().getId()})}"
 					th:text="${author.getBirthCountry().getName()}">Ссылка на
 						страну</a></td>
-				<td><p th:text="${author.getBirthday()}" /></td>
-				<td><p th:text="${author.getDeathDate()}" /></td>
+				<td><p th:text="${#temporals.format(author.getBirthday(), 'dd MMMM yyyy')}" /></td>
+				<td><p th:text="${#temporals.format(author.getDeathDate(), 'dd MMMM yyyy')}" /></td>
 				<td><a th:href="@{/api/author/{id}/books(id=${author.getId()})}">Книги, написанные автором</a></td>
 			</tr>
 		</table>
-		<form th:method="DELETE"
-			th:action="@{/api/author/{id}/delete(id=${author.getId()})}">
+		<form sec:authorize="hasRole('ROLE_ADMIN')" th:method="POST"
+			th:action="@{/api/author/{id}/delete/confirm(id=${author.getId()})}">
 			<input type="submit" value="Удалить" />
 		</form>
 
-		<a th:href="@{/api/author/{id}/edit(id=${author.getId()})}">Редактировать</a>
+		<a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/api/author/{id}/edit(id=${author.getId()})}">Редактировать</a>
 
-		<a th:href="@{/api/author?page={from}(from=${fromPage})}">Список
-			авторов</a> <input type="button" value="Назад" onclick="history.back()">
+		<input type="button" value="Назад" onclick="history.back()">
 	</div>
 </body>
 </html>

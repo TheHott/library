@@ -3,7 +3,7 @@
 	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="UTF-8">
-<title>Авторы</title>
+<title>Книги, написанные автором</title>
 </head>
 <body>
 	<div sec:authorize="isAuthenticated()">
@@ -21,8 +21,12 @@
 		</table>
 	</div>
 	<div>
+		<b><a href="/api/author">Список авторов</a> -> <a th:href="@{/api/author/{id}(id = ${author.getId()})}">Автор "<th:block th:text="${author.getFullName()}"/>"</a> -> Книги автора "<th:block th:text="${author.getFullName()}"/>"</b>
+		<h2>
+			Книги, написанные автором <b th:text="${author.getFullName()}"></b>
+		</h2>
 		<h3>
-			Список пуст! <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/api/author/create}">Добавить автора</a>
+			Список пуст! <a th:href="@{/api/author/{id}(id=${author.getId()})}">Вернуться</a>
 		</h3>
 	</div>
 </body>

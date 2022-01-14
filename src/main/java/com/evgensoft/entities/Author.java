@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 
 @Data
@@ -31,8 +33,10 @@ public class Author {
 	private Country birthCountry;
 
 	@Column(nullable = false)
+	@DateTimeFormat(pattern = "dd MMMM yyyy")
 	private LocalDate birthday;
 
+	@DateTimeFormat(pattern = "dd MMMM yyyy")
 	private LocalDate deathDate;
 
 	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL)

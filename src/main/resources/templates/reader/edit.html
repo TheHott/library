@@ -21,6 +21,10 @@
 		</table>
 	</div>
 	<div>
+		<b><a href="/api/reader">Список читателей</a> -> <a
+			th:href="@{/api/reader/{id}(id = ${reader.getId()})}">Читатель "<th:block
+					th:text="${reader.getFullName()}" />"
+		</a> -> Редактировать</b>
 		<form th:method="POST"
 			th:action="@{/api/reader/{id}/update(id=${reader.getId()})}"
 			th:object="${reader}">

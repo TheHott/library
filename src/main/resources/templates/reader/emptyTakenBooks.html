@@ -21,6 +21,7 @@
 		</table>
 	</div>
 	<div>
+		<b><a href="/api/reader">Список читателей</a> -> <a th:href="@{/api/reader/{id}(id = ${reader.getId()})}">Читатель "<th:block th:text="${reader.getFullName()}"/>"</a> -> Книги, взятые читателем</b>
 		<h3>
 			Список пуст! <a th:href="@{/api/book}">Взять книгу</a>
 		</h3>

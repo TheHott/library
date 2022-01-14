@@ -21,7 +21,13 @@
 		</table>
 	</div>
 	<div>
-		<h2>Список книг, взятых читателем <b th:text="${reader.getFullName()}"></b></h2>
+		<b><a href="/api/reader">Список читателей</a> -> <a
+			th:href="@{/api/reader/{id}(id = ${reader.getId()})}">Читатель "<th:block
+					th:text="${reader.getFullName()}" />"
+		</a> -> Книги, взятые читателем</b>
+		<h2>
+			Список книг, взятых читателем <b th:text="${reader.getFullName()}"></b>
+		</h2>
 		<table border=1>
 			<tr>
 				<td>ID книги</td>
@@ -38,7 +44,8 @@
 				<td><a
 					th:href="@{/api/author/{id}(id=${takenBook.getBook().getAuthor().getId()})}"
 					th:text="${takenBook.getBook().getAuthor().getFullName()}"></a></td>
-				<td><p th:text="${takenBook.getDateOfTaking()}" /></td>
+				<td><p
+						th:text="${#temporals.format(takenBook.getDateOfTaking(), 'dd MMMM yyyy')}" /></td>
 				<td><form th:method="POST"
 						th:action="@{/api/book/{bookId}/receive/{takenId}/{readerId}(bookId=${takenBook.getBook().getId()}, 
 						takenId=${takenBook.getId()}, readerId=${takenBook.getReader().getId()})}">

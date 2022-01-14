@@ -21,7 +21,13 @@
 		</table>
 	</div>
 	<div>
-		<h2>Список авторов, рожденных в стране <b th:text="${country.getName()}"></b></h2>
+		<b><a href="/api/country">Список стран</a> -> <a
+			th:href="@{/api/country/{id}(id = ${country.getId()})}">Страна "<th:block
+					th:text="${country.getName()}" />"
+		</a> -> Авторы из страны <th:block th:text="${country.getName()}"/></b>
+		<h2>
+			Список авторов, рожденных в стране <b th:text="${country.getName()}"></b>
+		</h2>
 		<table border=1>
 			<tr>
 				<td>ID автора</td>
@@ -31,9 +37,13 @@
 			</tr>
 			<tr th:each="author : ${resultPage}">
 				<td><p th:text="${author.getId()}" /></td>
-				<td><p th:text="${author.getFullName()}" /></td>
-				<td><p th:text="${author.getBirthday()}" /></td>
-				<td><p th:text="${author.getDeathDate()}" /></td>
+				<td><a th:href="@{/api/author/{id}(id=${author.getId()})}"
+					th:text="${author.getFullName()}"></a></td>
+				<!-- <td><p th:text="${author.getFullName()}" /></td>  -->
+				<td><p
+						th:text="${#temporals.format(author.getBirthday(), 'dd MMMM yyyy')}" /></td>
+				<td><p
+						th:text="${#temporals.format(author.getDeathDate(), 'dd MMMM yyyy')}" /></td>
 			</tr>
 		</table>
 

@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 
 @Data
@@ -28,5 +30,6 @@ public class TakenBook {
 	private Reader reader;
 
 	@Column(nullable = false)
+	@DateTimeFormat(pattern = "dd MMMM yyyy")
 	private LocalDate dateOfTaking;
 }

@@ -21,6 +21,7 @@
 		</table>
 	</div>
 	<div>
+		<b><a href="/api/reader">Список читателей</a> -> Создать</b>
 		<form th:method="POST" th:action="@{/api/reader/new}"
 			th:object="${reader}">
 			<label for="name">Введите имя: </label> <input type="text"

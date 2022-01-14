@@ -22,7 +22,7 @@
 	</div>
 	<div>
 		<h3>
-			Список пуст! <a th:href="@{/api/reader/create}">Добавить читателя</a>
+			Список пуст! <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/api/reader/create}">Добавить читателя</a>
 		</h3>
 	</div>
 </body>

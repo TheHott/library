@@ -21,6 +21,7 @@
 		</table>
 	</div>
 	<div>
+		<b><a href="/api/book">Список книг</a> -> <a th:href="@{/api/book/{id}(id = ${book.getId()})}">Книга "<th:block th:text="${book.getName()}"/>"</a> -> Редактировать</b>
 		<form th:method="POST"
 			th:action="@{/api/book/{id}/update(id=${book.getId()})}"
 			th:object="${book}">

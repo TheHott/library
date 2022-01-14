@@ -6,8 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.evgensoft.dto.requests.BookRequestDTO;
-import com.evgensoft.dto.requests.ReaderRequestDTO;
 import com.evgensoft.entities.Book;
+import com.evgensoft.entities.Reader;
 
 public interface BookService {
 	Long createBook(BookRequestDTO bookReq);
@@ -24,7 +24,7 @@ public interface BookService {
 
 	Long getCount();
 
-	void giveBookToReader(Long bookId, ReaderRequestDTO readerReq);
+	void giveBookToReader(Long bookId, Reader reader);
 
 	public void giveBookToLibrary(Long bookId, Long takenId);
 
