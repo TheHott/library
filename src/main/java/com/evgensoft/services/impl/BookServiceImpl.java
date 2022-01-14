@@ -93,4 +93,12 @@ public class BookServiceImpl implements BookService {
 		takenBookRepo.deleteById(takenId);
 	}
 
+	@Override
+	public List<Book> listAll(String keyword) {
+		if (keyword != null) {
+			return bookRepo.search(keyword);
+		}
+		return bookRepo.findAll();
+	}
+
 }

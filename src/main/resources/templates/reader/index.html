@@ -4,6 +4,11 @@
 <head>
 <meta charset="UTF-8">
 <title>Читатели</title>
+<script type="text/javascript">
+	function clearSearch() {
+		window.location = "[[@{/api/book/}]]";
+	}
+</script>
 </head>
 <body>
 	<div sec:authorize="isAuthenticated()">
@@ -21,9 +26,17 @@
 		</table>
 	</div>
 	<div>
-		<form th:method="POST" th:action="@{/api/reader/get}">
-			Введите ID: <input type="text" name="id" /> <input type="submit"
-				value="Открыть" />
+		<div id="name" th:switch="${keyword}">
+			<h2 th:case=null>Читатели - главная страница</h2>
+			<h2 th:case="*">
+				Читатели - поиск по запросу "<th:block th:text="${keyword}" />"
+			</h2>
+		</div>
+		<form th:action="@{/api/reader/search}">
+			<label for="name">Введите запрос: </label> <input type="text"
+				name="keyword" id="keyword" th:value="${keyword}" required /> <input
+				type="submit" value="Поиск" /> <input type="button"
+				value="Очистить" id="btnClear" onclick="clearSearch()" />
 		</form>
 		<a th:href="@{/api/reader/create}" th:text="Создать">reader</a> <br />
 		<br />

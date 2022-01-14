@@ -1,5 +1,7 @@
 package com.evgensoft.repositories;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,4 +20,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 	Long countByAuthorId(@Param("authorId") Long authorId);
 
 	Page<Book> findAllByAuthorId(Long authorId, Pageable pageable);
+
+	@Query("SELECT b FROM Book b LEFT JOIN Author a ON b.author.id = a.id WHERE CONCAT(b.name, ' ', a.fullName, ' ', b.releaseDate) LIKE %?1%")
+	public List<Book> search(String keyword);
 }

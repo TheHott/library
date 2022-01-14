@@ -27,4 +27,6 @@ public interface BookService {
 	void giveBookToReader(Long bookId, ReaderRequestDTO readerReq);
 
 	public void giveBookToLibrary(Long bookId, Long takenId);
+
+	List<Book> listAll(String keyword);
 }

@@ -73,4 +73,11 @@ public class ReaderServiceImpl implements ReaderService {
 		return takenBookRepo.findAllByReaderId(readerId, pageable);
 	}
 
+	@Override
+	public List<Reader> listAll(String keyword) {
+		if (keyword != null)
+			return readerRepo.search(keyword);
+		return readerRepo.findAll();
+	}
+
 }

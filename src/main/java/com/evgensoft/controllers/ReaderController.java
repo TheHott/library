@@ -1,8 +1,11 @@
 package com.evgensoft.controllers;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -126,6 +129,16 @@ public class ReaderController {
 		model.addAttribute("pages", pages);
 
 		return "reader/takenBooks";
+	}
+
+	@RequestMapping("/search")
+	public String search(Model model, @Param("keyword") String keyword) {
+		List<Reader> listReaders = readerService.listAll(keyword);
+
+		model.addAttribute("resultPage", listReaders);
+		model.addAttribute("keyword", keyword);
+
+		return "reader/index";
 	}
 
 }

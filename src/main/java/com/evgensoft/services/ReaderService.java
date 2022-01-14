@@ -28,4 +28,6 @@ public interface ReaderService {
 	// Reader getReaderByFullName(String name);
 
 	Long getTakenBooksCount(Long id);
+
+	List<Reader> listAll(String keyword);
 }

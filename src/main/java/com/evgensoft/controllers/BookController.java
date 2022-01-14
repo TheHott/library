@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -139,6 +140,16 @@ public class BookController {
 	public String delete(@PathVariable("id") Long id) {
 		bookService.deleteBook(id);
 		return "redirect:/api/book";
+	}
+
+	@RequestMapping("/search")
+	public String search(Model model, @Param("keyword") String keyword) {
+		List<Book> listBooks = bookService.listAll(keyword);
+
+		model.addAttribute("resultPage", listBooks);
+		model.addAttribute("keyword", keyword);
+
+		return "book/index";
 	}
 
 }
