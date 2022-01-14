@@ -29,7 +29,7 @@
 			th:action="@{/api/country/{id}/update(id=${country.getId()})}"
 			th:object="${country}">
 			<label for="name">Введите имя: </label> <input type="text"
-				th:field="*{name}" id="name" value="${country.getName()}" /> <br />
+				th:field="*{name}" id="name" value="${country.getName()}" required/> <br />
 			<input type="submit" value="Обновить" />
 		</form>
 

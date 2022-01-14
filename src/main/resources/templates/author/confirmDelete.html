@@ -36,8 +36,8 @@
 				<td><p th:text="${author.getId()}" /></td>
 				<td><p th:text="${author.getFullName()}" /></td>
 				<td><p th:text="${author.getBirthCountry().getName()}" /></td>
-				<td><p th:text="${author.getBirthday()}" /></td>
-				<td><p th:text="${author.getDeathDate()}" /></td>
+				<td><p th:text="${#temporals.format(author.getBirthday(), 'dd MMMM yyyy')}" /></td>
+				<td><p th:text="${#temporals.format(author.getDeathDate(), 'dd MMMM yyyy')}" /></td>
 			</tr>
 		</table>
 

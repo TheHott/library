@@ -25,7 +25,7 @@
 		<form th:method="POST" th:action="@{/api/reader/new}"
 			th:object="${reader}">
 			<label for="name">Введите имя: </label> <input type="text"
-				th:field="*{fullName}" id="fullName" /> <br /> <input
+				th:field="*{fullName}" id="fullName" required/> <br /> <input
 				type="submit" value="Создать" />
 		</form>
 		<a th:href="@{/api/reader}">Назад</a>

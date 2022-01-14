@@ -29,12 +29,12 @@
 				<tr>
 					<td>Введите имя</td>
 					<td><input type="text" th:field="*{fullName}" id="fullName"
-						autocomplete="off" /></td>
+						autocomplete="off" required/></td>
 				</tr>
 				<tr>
 					<td>Выберите страну рождения</td>
 					<td><input type="text" list="countries"
-						th:field="*{birthCountryName}" autocomplete="off" /> <datalist
+						th:field="*{birthCountryName}" autocomplete="off" required/> <datalist
 							id="countries">
 							<option th:each="country : ${countryList}"
 								th:value="${country.getName()}">
@@ -43,7 +43,7 @@
 				<tr>
 					<td>Введите дату рождения</td>
 					<td><input type="text" th:field="*{birthday}" id="birthday"
-						placeholder="ДД.ММ.ГГГГ" autocomplete="off" /></td>
+						placeholder="ДД.ММ.ГГГГ" autocomplete="off" required/></td>
 				</tr>
 				<tr>
 					<td>Введите дату смерти (если автор жив - оставить пустым)</td>
@@ -51,6 +51,9 @@
 						placeholder="ДД.ММ.ГГГГ" autocomplete="off" /></td>
 				</tr>
 			</table>
+			<b th:text="${countryError}"></b>
+			<b th:text="${birthdayError}"></b>
+			<b th:text="${fullNameError}"></b>
 			<input type="submit" value="Создать" />
 		</form>
 		<a th:href="@{/api/author}">Назад</a>

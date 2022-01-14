@@ -29,9 +29,9 @@
 			th:action="@{/api/reader/{id}/update(id=${reader.getId()})}"
 			th:object="${reader}">
 			<label for="name">Введите имя: </label> <input type="text"
-				th:field="*{fullName}" id="fullName" value="${reader.getFullName()}" />
+				th:field="*{fullName}" id="fullName" value="${reader.getFullName()}" required/>
 			<label for="name">Введите задолженность: </label> <input type="text"
-				th:field="*{debt}" id="debt" value="${reader.getDebt()}" /> <br />
+				th:field="*{debt}" id="debt" value="${reader.getDebt()}" required/> <br />
 			<input type="submit" value="Обновить" />
 		</form>
 

@@ -36,7 +36,7 @@
 				<td><p th:text="${book.getId()}" /></td>
 				<td><p th:text="${book.getName()}" /></td>
 				<td><p th:text="${book.getAuthor().getFullName()}"/></td>
-				<td><p th:text="${book.getReleaseDate()}" /></td>
+				<td><p th:text="${#temporals.format(book.getReleaseDate(), 'dd MMMM yyyy')}" /></td>
 				<td><p th:text="${book.getInStock}" /></td>
 			</tr>
 		</table>

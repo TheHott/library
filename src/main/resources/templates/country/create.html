@@ -25,7 +25,7 @@
 		<form th:method="POST" th:action="@{/api/country/new}"
 			th:object="${country}">
 			<label for="name">Введите имя: </label> <input type="text"
-				th:field="*{name}" id="name" /> <br /> <input type="submit"
+				th:field="*{name}" id="name" required/> <br /> <input type="submit"
 				value="Создать" />
 		</form>
 		<a th:href="@{/api/country}">Назад</a>

@@ -28,12 +28,12 @@
 			<table>
 				<tr>
 					<td>Введите имя</td>
-					<td><input type="text" th:field="*{fullName}" id="fullName" /></td>
+					<td><input type="text" th:field="*{fullName}" id="fullName" required/></td>
 				</tr>
 				<tr>
 					<td>Выберите страну рождения</td>
 					<td><input type="text" list="countries"
-						th:field="*{birthCountry.Name}" autocomplete="off" /> 
+						th:field="*{birthCountry.Name}" autocomplete="off" required/> 
 						<datalist id="countries">
 							<option th:each="country : ${countryList}" th:value="${country.getName()}">
 						</datalist></td>
@@ -41,14 +41,14 @@
 				<tr>
 					<td>Введите дату рождения</td>
 					<td><input type="text" th:field="*{birthday}" id="birthday"
-						placeholder="ДД.ММ.ГГГГ" /></td>
+						placeholder="Например, 28 апреля 2000" required/></td>
 				</tr>
 				<tr>
 					<td>Введите дату смерти <br /> (если автор жив - оставить
 						пустым)
 					</td>
 					<td><input type="text" th:field="*{deathDate}" id="deathDate"
-						placeholder="ДД.ММ.ГГГГ" /></td>
+						placeholder="Например, 28 апреля 2000" required/></td>
 				</tr>
 			</table>
 			<input type="submit" value="Обновить" />

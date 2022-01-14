@@ -28,12 +28,12 @@
 			<table>
 				<tr>
 					<td>Введите название</td>
-					<td><input type="text" th:field="*{name}" id="name" /></td>
+					<td><input type="text" th:field="*{name}" id="name" required/></td>
 				</tr>
 				<tr>
 					<td>Введите ФИО автора</td>
 					<td><input type="text" list="authors"
-						th:field="*{author.fullName}" autocomplete="off" /> <datalist
+						th:field="*{author.fullName}" autocomplete="off" required/> <datalist
 							id="authors">
 							<option th:each="author : ${authorList}"
 								th:value="${author.getFullName()}" th:label="${author.getBirthday()}">
@@ -42,11 +42,11 @@
 				<tr>
 					<td>Дата выпуска книги</td>
 					<td><input type="text" th:field="*{releaseDate}"
-						id="releaseDate" placeholder="ДД.ММ.ГГГГ" /></td>
+						id="releaseDate" placeholder="Например, 28 апреля 2000" required/></td>
 				</tr>
 				<tr>
 					<td>Количество на складе</td>
-					<td><input type="text" th:field="*{inStock}" id="inStock" /></td>
+					<td><input type="text" th:field="*{inStock}" id="inStock" required/></td>
 				</tr>
 			</table>
 			<input type="submit" value="Обновить" />

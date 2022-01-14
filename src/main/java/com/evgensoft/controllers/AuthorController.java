@@ -69,13 +69,13 @@ public class AuthorController {
 	}
 
 	@PostMapping("/new")
-	public String create(@ModelAttribute("author") AuthorRequestDTO authorReq) {
+	public String create(Model model, @ModelAttribute("author") AuthorRequestDTO authorReq) {
 		Country country = countryService.getByName(authorReq.getBirthCountryName());
 		if (country == null) {
-			// TODO сделать что-нибудь чтоб возвращало текст ошибки
-			return "redirect:/api/author/create";
-		} else
-			authorReq.setBirthCountry(country);
+			model.addAttribute("countryError", "Неправильное название страны");
+		}
+
+		authorReq.setBirthCountry(country);
 		authorService.createAuthor(authorReq);
 
 		return "redirect:/api/author";
