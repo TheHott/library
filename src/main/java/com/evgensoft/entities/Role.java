@@ -16,6 +16,10 @@ import lombok.Data;
 @Entity
 @Table(name = "t_role")
 public class Role implements GrantedAuthority {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1964337516483562730L;
 	@Id
 	private Long id;
 	private String name;

@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.evgensoft.entities.User;
-import com.evgensoft.services.impl.UserServiceTest;
+import com.evgensoft.services.impl.UserServiceImpl;
 
 @Controller
 public class RegistrationController {
 	@Autowired
-	private UserServiceTest userService;
+	private UserServiceImpl userService;
 	
 	@GetMapping("/signup")
 	public String signup(Model model) {

@@ -22,6 +22,10 @@ import lombok.Data;
 @Data
 @Table(name = "t_user")
 public class User implements UserDetails {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3381052493121673805L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -31,7 +35,7 @@ public class User implements UserDetails {
 	private String password;
 	@Transient
 	private String passwordConfirm;
-	
+
 	@ManyToMany(fetch = FetchType.EAGER)
 	private Set<Role> roles;
 
@@ -59,7 +63,5 @@ public class User implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
-	
-	
-	
+
 }
